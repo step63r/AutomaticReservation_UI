@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticReservation_UI", "AutomaticReservation_UI\AutomaticReservation_UI.csproj", "{5765CC52-52DF-4667-8540-FC0388F3BC60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5765CC52-52DF-4667-8540-FC0388F3BC60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5765CC52-52DF-4667-8540-FC0388F3BC60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5765CC52-52DF-4667-8540-FC0388F3BC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5765CC52-52DF-4667-8540-FC0388F3BC60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A837C5C9-5900-4F73-9FF7-39BF6D38D253}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,136 @@
+﻿<Controls:MetroWindow x:Class="AutomaticReservation_UI.MainWindow"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:ignore="http://www.galasoft.ch/ignore"
+                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                      xmlns:domain="clr-namespace:AutomaticReservation_UI.Domain"
+                      xmlns:ctrl="clr-namespace:AutomaticReservation_UI.UserControls"
+                      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                      TextElement.FontWeight="Regular"
+                      TextElement.FontSize="13"
+                      TextOptions.TextFormattingMode="Ideal"
+                      TextOptions.TextRenderingMode="Auto"
+                      Background="{DynamicResource MaterialDesignPaper}"
+                      FontFamily="{DynamicResource MaterialDesignFont}"
+                      mc:Ignorable="d ignore"
+                      Height="768"
+                      Width="1024"
+                      Title="東横イン - ホテル自動予約ツール"
+                      TitleForeground="White"
+                      DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <wpf:ColorZone Mode="Standard" Padding="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox materialDesign:HintAssist.Hint="ホテルID" Width="100" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                            <DatePicker x:Name="TargetDatePicker" Width="100" materialDesign:HintAssist.Hint="宿泊日" VerticalAlignment="Center">
+                                <DatePicker.SelectedDate>
+                                    <Binding Path="TargetDate" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <domain:FutureDateValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </DatePicker.SelectedDate>
+                            </DatePicker>
+                            <TextBlock Text="から1泊" Opacity="1.0" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
+                            <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" Margin="0,0,20,0">
+                                <ComboBoxItem>シングル</ComboBoxItem>
+                                <ComboBoxItem>ダブル</ComboBoxItem>
+                                <ComboBoxItem>ツイン</ComboBoxItem>
+                            </ComboBox>
+                            <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Margin="0,0,10,0" IsChecked="True">
+                                禁煙
+                            </CheckBox>
+                            <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Margin="0,0,10,0">
+                                喫煙
+                            </CheckBox>
+                            <!--MultiValueConverterを付ける-->
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="0,0,5,0"/>
+                            <TextBlock Text="喫煙を優先" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Button Content="{materialDesign:PackIcon Play}" Command="{Binding BtnExecute}" HorizontalAlignment="Right" Width="80"/>
+                    </Grid>
+                </Grid>
+            </wpf:ColorZone>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                <ItemsControl ItemsSource="{Binding TestData}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ctrl:ReservationControl/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <!-- ★★★　サンプル　★★★ -->
+            <!--<Grid Grid.Column="0" Grid.Row="0" Margin="10">
+                    <GroupBox Header="2018/02/18 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryLight">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Play" Height="32" Width="32" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                    </GroupBox>
+                </Grid>
+                <Grid Grid.Column="1" Grid.Row="0" Margin="10">
+                    <GroupBox Header="2018/02/19 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryDark">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CheckCircleOutline" Height="32" Width="32" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                    </GroupBox>
+                </Grid>
+                <Grid Grid.Column="2" Grid.Row="0" Margin="10">
+                    <GroupBox Header="2018/02/20 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="Accent">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="AlertOutline" Height="32" Width="32" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                    </GroupBox>
+                </Grid>-->
+        </Grid>
+    </Grid>
+    <!--</Grid>-->
+</Controls:MetroWindow>

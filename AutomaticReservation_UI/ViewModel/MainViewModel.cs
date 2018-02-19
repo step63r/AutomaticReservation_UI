@@ -42,9 +42,20 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
-        // TEST DATA
-        public ObservableCollection<int> TestData { get; set; } = new ObservableCollection<int>();
-        private int count = 1;
+        public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
+        private ReservationControlViewModel _reservationViewModel;
+        public ReservationControlViewModel ReservationViewModel
+        {
+            get
+            {
+                return _reservationViewModel;
+            }
+            set
+            {
+                _reservationViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         /// <summary>
@@ -70,8 +81,8 @@ namespace AutomaticReservation_UI.ViewModel
         /// </summary>
         public void Execute()
         {
-            TestData.Add(count);
-            count++;
+            var item = new ReservationControlViewModel(DateTime.Now, "This is Test");
+            ReservationList.Add(item);
         }
         /// <summary>
         /// コマンドが実行可能かどうかを判定

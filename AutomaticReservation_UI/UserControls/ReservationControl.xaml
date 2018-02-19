@@ -6,17 +6,40 @@
              xmlns:local="clr-namespace:AutomaticReservation_UI.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="320" d:DesignWidth="320">
     <Grid Margin="10" Width="300" Height="300">
-        <GroupBox Header="YYYY/MM/DD HotelName" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryLight">
+        <GroupBox Header="{Binding Title}" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="{Binding ColorMode}">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Play" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IconMode}" Height="32" Width="32" VerticalAlignment="Center"/>
                         <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
         </GroupBox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TextBlock Text="LOGGING HERE" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Button Content="スクリーンショット" Style="{StaticResource MaterialDesignRaisedLightButton}" Command="{Binding BtnShowScreenShot}" Margin="5"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Button Content="キャンセル" Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding BtnCancel}" Margin="5"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

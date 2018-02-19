@@ -9,6 +9,7 @@
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:domain="clr-namespace:AutomaticReservation_UI.Domain"
                       xmlns:ctrl="clr-namespace:AutomaticReservation_UI.UserControls"
+                      xmlns:vm="clr-namespace:AutomaticReservation_UI.ViewModel"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular"
                       TextElement.FontSize="13"
@@ -93,14 +94,14 @@
         </Grid>
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True">
-                <ItemsControl ItemsSource="{Binding TestData}">
+                <ItemsControl ItemsSource="{Binding ReservationList}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:ReservationControlViewModel}">
                             <ctrl:ReservationControl/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

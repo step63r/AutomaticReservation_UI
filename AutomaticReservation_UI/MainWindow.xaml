@@ -61,6 +61,19 @@
                                 <ComboBoxItem>ダブル</ComboBoxItem>
                                 <ComboBoxItem>ツイン</ComboBoxItem>
                             </ComboBox>
+                            <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" Margin="0,0,20,0">
+                                <ComboBoxItem>15:00～16:00</ComboBoxItem>
+                                <ComboBoxItem>16:00～17:00</ComboBoxItem>
+                                <ComboBoxItem>17:00～18:00</ComboBoxItem>
+                                <ComboBoxItem>18:00～19:00</ComboBoxItem>
+                                <ComboBoxItem>19:00～20:00</ComboBoxItem>
+                                <ComboBoxItem>20:00～21:00</ComboBoxItem>
+                                <ComboBoxItem>21:00～22:00</ComboBoxItem>
+                                <ComboBoxItem>22:00～22:30</ComboBoxItem>
+                                <ComboBoxItem>22:30～23:00</ComboBoxItem>
+                                <ComboBoxItem>23:00～23:30</ComboBoxItem>
+                                <ComboBoxItem>23:30～24:00</ComboBoxItem>
+                            </ComboBox>
                             <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Margin="0,0,10,0" IsChecked="True">
                                 禁煙
                             </CheckBox>

@@ -2,7 +2,6 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using AutomaticReservation_UI.Model;
 using System;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace AutomaticReservation_UI.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase, INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         #region コマンド・プロパティ
         private readonly IDataService _dataService;
@@ -27,7 +26,7 @@ namespace AutomaticReservation_UI.ViewModel
             set
             {
                 _targetDate = value;
-                OnPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         private RelayCommand _btnExecute;
@@ -81,13 +80,6 @@ namespace AutomaticReservation_UI.ViewModel
         public bool CanExecute()
         {
             return true;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         ////public override void Cleanup()

@@ -107,15 +107,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Domain\FutureDateValidationRule.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="ToyokoInn\ProcessFormat.cs" />
     <Compile Include="UserControls\ReservationControl.xaml.cs">
       <DependentUpon>ReservationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ReservationControlViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

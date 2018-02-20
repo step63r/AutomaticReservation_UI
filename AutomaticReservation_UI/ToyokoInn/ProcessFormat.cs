@@ -6,16 +6,16 @@ using AutomaticReservation_UI.Common;
 namespace AutomaticReservation_UI.ToyokoInn
 {
     /// <summary>
-    /// Pythonモジュールに引き渡すデータクラス
+    /// 予約データクラス
     /// </summary>
     public class ProcessFormat
     {
-        // ホテルID
-        public string HotelID { get; set; }
+        // ホテル
+        public Hotel HotelID { get; set; }
         // 宿泊日
         public DateTime CheckinDate { get; set; }
         // 部屋タイプ
-        public int RoomType { get; set; }
+        public RoomType Type { get; set; }
         // 禁煙ルームを検索する
         public bool EnableNoSmoking { get; set; }
         // 喫煙ルームを検索する
@@ -23,7 +23,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         // 喫煙ルームを優先して検索する
         public bool SmokingFirst { get; set; }
         // チェックイン予定時刻
-        public string CheckinValue { get; set; }
+        public CheckinTime CheckinValue { get; set; }
     }
 
     /// <summary>
@@ -36,12 +36,12 @@ namespace AutomaticReservation_UI.ToyokoInn
         public event PropertyChangedEventHandler PropertyChanged;
 
         [XmlIgnore]
-        private int _hotelID;
+        private string _hotelID;
         /// <summary>
         /// ホテルID
         /// </summary>
         [XmlElement("HotelID")]
-        public int HotelID
+        public string HotelID
         {
             get { return _hotelID; }
             set

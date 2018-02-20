@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using AutomaticReservation_UI.Model;
+using AutomaticReservation_UI.Common;
+using AutomaticReservation_UI.ToyokoInn;
 using System;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
@@ -19,16 +21,7 @@ namespace AutomaticReservation_UI.ViewModel
     {
         #region コマンド・プロパティ
         private readonly IDataService _dataService;
-        private DateTime _targetDate;
-        public DateTime TargetDate
-        {
-            get { return _targetDate; }
-            set
-            {
-                _targetDate = value;
-                RaisePropertyChanged();
-            }
-        }
+
         private RelayCommand _btnExecute;
         public RelayCommand BtnExecute
         {
@@ -39,6 +32,125 @@ namespace AutomaticReservation_UI.ViewModel
                     _btnExecute = new RelayCommand(Execute, CanExecute);
                 }
                 return _btnExecute;
+            }
+        }
+
+        private string _hotelID;
+        /// <summary>
+        /// ホテルID
+        /// </summary>
+        public string HotelID
+        {
+            get
+            {
+                return _hotelID;
+            }
+            set
+            {
+                _hotelID = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private DateTime _checkinDate;
+        /// <summary>
+        /// チェックイン日付
+        /// </summary>
+        public DateTime CheckinDate
+        {
+            get
+            {
+                return _checkinDate;
+            }
+            set
+            {
+                _checkinDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<RoomType> _colRoomType;
+        /// <summary>
+        /// 部屋タイプコレクション
+        /// </summary>
+        public ObservableCollection<RoomType> ColRoomType
+        {
+            get
+            {
+                return _colRoomType;
+            }
+            set
+            {
+                _colRoomType = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<CheckinTime> _colCheckinTime;
+        /// <summary>
+        /// チェックイン予定時刻コレクション
+        /// </summary>
+        public ObservableCollection<CheckinTime> ColCheckinTime
+        {
+            get
+            {
+                return _colCheckinTime;
+            }
+            set
+            {
+                _colCheckinTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _chkNoSmoking;
+        /// <summary>
+        /// 禁煙を検索する
+        /// </summary>
+        public bool ChkNoSmoking
+        {
+            get
+            {
+                return _chkNoSmoking;
+            }
+            set
+            {
+                _chkNoSmoking = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _chkSmoking;
+        /// <summary>
+        /// 喫煙を検索する
+        /// </summary>
+        public bool ChkSmoking
+        {
+            get
+            {
+                return _chkSmoking;
+            }
+            set
+            {
+                _chkSmoking = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isSmokingFirst;
+        /// <summary>
+        /// 喫煙を優先する
+        /// </summary>
+        public bool IsSmokingFirst
+        {
+            get
+            {
+                return _isSmokingFirst;
+            }
+            set
+            {
+                _isSmokingFirst = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -73,7 +185,9 @@ namespace AutomaticReservation_UI.ViewModel
                         return;
                     }
                 });
-            TargetDate = DateTime.Now;
+            CheckinDate = DateTime.Now.AddDays(1);
+            ChkNoSmoking = true;
+            ChkSmoking = false;
         }
 
         /// <summary>
@@ -90,7 +204,8 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanExecute()
         {
-            return true;
+            // HotelID.Equals("") ←これは怒られるので注意
+            return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking);
         }
 
         ////public override void Cleanup()

@@ -5,6 +5,7 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Safari;
 using System;
+using System.Collections.Generic;
 
 namespace AutomaticReservation_UI.Common
 {
@@ -21,7 +22,13 @@ namespace AutomaticReservation_UI.Common
                     throw new ArgumentException(string.Format("Not Definition. BrowserName:{0}", browserName));
 
                 case AppSettings.BrowserName.Chrome:
-                    return new ChromeDriver();
+                    // コマンドプロンプトを非表示にする
+                    var chromeDriverService = ChromeDriverService.CreateDefaultService();
+                    chromeDriverService.HideCommandPromptWindow = true;
+                    // ブラウザを非表示にする
+                    var chromeOptions = new ChromeOptions();
+                    chromeOptions.AddArguments(new List<string>() {"lang=ja" });
+                    return new ChromeDriver(chromeDriverService, chromeOptions);
 
                 case AppSettings.BrowserName.Firefox:
                     FirefoxDriverService driverService = FirefoxDriverService.CreateDefaultService();

@@ -117,6 +117,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\AppSettings.cs" />
+    <Compile Include="Common\AsyncCommandBase.cs" />
+    <Compile Include="Common\IAsyncCommand.cs" />
     <Compile Include="Common\IProgressBar.cs" />
     <Compile Include="Common\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="Common\WebDriverFactory.cs" />

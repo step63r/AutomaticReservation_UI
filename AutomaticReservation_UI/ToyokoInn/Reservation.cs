@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Threading;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
@@ -10,8 +11,8 @@ namespace AutomaticReservation_UI.ToyokoInn
     public class Reservation : ViewModelBase, IProgressBar
     {
         // 後でどこかセーフティな場所に置く
-        protected static string LOGIN_ADDRESS = "Hoge@yahoo.co.jp";
-        protected static string LOGIN_PASS = "hogepass";
+        protected static string LOGIN_ADDRESS = "hoge@yahoo.co.jp";
+        protected static string LOGIN_PASS = "pass";
         protected static string LOGIN_TEL = "09012345678";
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <returns></returns>
         public bool Execute()
         {
-            bool ret = true;
+            bool ret = false;
 
             using (var driver = WebDriverFactory.CreateInstance(AppSettings.BrowserName.Chrome))
             {
@@ -172,9 +173,9 @@ namespace AutomaticReservation_UI.ToyokoInn
                         #endregion
 
                         #region 空室発見～予約確定
-                        Message = "予約中";
                         if (ret)
                         {
+                            Message = "予約中";
                             // 電話番号入力
                             driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(LOGIN_TEL);
                             // チェックイン予定時刻
@@ -195,15 +196,12 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 {
                                     // 要素はあるが文字が違う
                                     Message = "予約できませんでした";
-                                    ret = false;
                                 }
                             }
                             catch (NoSuchElementException)
                             {
                                 // 要素がない
                                 Message = "予約できませんでした";
-                                ret = false;
-                                // TODO 指定秒待つ
                             }
 
                             if (ret)
@@ -212,9 +210,11 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 break;
                             }
                         }
+                        // 指定秒待つ
+                        Message = "スレッド待機中...";
+                        Thread.Sleep(SiteConfig.TIME_SLEEP);
                         #endregion
                     }
-
                 }
                 catch
                 {

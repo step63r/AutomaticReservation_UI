@@ -1,13 +1,10 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using AutomaticReservation_UI.Common;
 using AutomaticReservation_UI.Model;
-using AutomaticReservation_UI.Common;
 using AutomaticReservation_UI.ToyokoInn;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
-using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
-using System.Linq;
-using AutomaticReservation_UI.UserControls;
 
 namespace AutomaticReservation_UI.ViewModel
 {
@@ -86,6 +83,23 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private RoomType _selectedRoomType;
+        /// <summary>
+        /// 選択された部屋タイプ
+        /// </summary>
+        public RoomType SelectedRoomType
+        {
+            get
+            {
+                return _selectedRoomType;
+            }
+            set
+            {
+                _selectedRoomType = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableCollection<CheckinTime> _colCheckinTime;
         /// <summary>
         /// チェックイン予定時刻コレクション
@@ -99,6 +113,23 @@ namespace AutomaticReservation_UI.ViewModel
             set
             {
                 _colCheckinTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private CheckinTime _selectedCheckinTime;
+        /// <summary>
+        /// 選択されたチェックイン予定時刻
+        /// </summary>
+        public CheckinTime SelectedCheckinTime
+        {
+            get
+            {
+                return _selectedCheckinTime;
+            }
+            set
+            {
+                _selectedCheckinTime = value;
                 RaisePropertyChanged();
             }
         }
@@ -188,6 +219,10 @@ namespace AutomaticReservation_UI.ViewModel
             CheckinDate = DateTime.Now.AddDays(1);
             ChkNoSmoking = true;
             ChkSmoking = false;
+
+            var displayTuple = Load();
+            ColRoomType = displayTuple.Item1;
+            ColCheckinTime = displayTuple.Item2;
         }
 
         /// <summary>
@@ -195,7 +230,26 @@ namespace AutomaticReservation_UI.ViewModel
         /// </summary>
         public void Execute()
         {
-            var item = new ReservationControlViewModel(CheckinDate, "品川大井町");
+            // 検索クラス作成
+            var finder = new ProcessFormat()
+            {
+                HotelID = new Hotel()
+                {
+                    // ----- ----- ----- ----- -----
+                    // Test Code
+                    // ----- ----- ----- ----- -----
+                    HotelID = HotelID,
+                    HotelName = "品川大井町",
+                    PrefCode = 14
+                },
+                CheckinDate = CheckinDate,
+                Type = SelectedRoomType,
+                CheckinValue = SelectedCheckinTime,
+                EnableNoSmoking = ChkNoSmoking,
+                EnableSmoking = ChkSmoking,
+                SmokingFirst = IsSmokingFirst
+            };
+            var item = new ReservationControlViewModel(finder);
             ReservationList.Add(item);
         }
         /// <summary>
@@ -205,7 +259,46 @@ namespace AutomaticReservation_UI.ViewModel
         public bool CanExecute()
         {
             // HotelID.Equals("") ←これは怒られるので注意
-            return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking);
+            return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking) && !(SelectedRoomType is null) && !(SelectedCheckinTime is null);
+        }
+
+        /// <summary>
+        /// データをXMLから読み込む
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<ObservableCollection<RoomType>, ObservableCollection<CheckinTime>> Load()
+        {
+            var ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
+
+            if (ret1 is null)
+            {
+                ret1 = new ObservableCollection<RoomType>();
+                if (XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir)))
+                {
+                    // 成功
+                }
+                else
+                {
+                    // raise exception
+                }
+            }
+
+            var ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
+
+            if (ret2 is null)
+            {
+                ret2 = new ObservableCollection<CheckinTime>();
+                if (XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir)))
+                {
+                    // 成功
+                }
+                else
+                {
+                    // raise exception
+                }
+            }
+
+            return Tuple.Create(ret1, ret2);
         }
 
         ////public override void Cleanup()

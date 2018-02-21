@@ -1,10 +1,16 @@
-﻿namespace AutomaticReservation_UI.ToyokoInn
+﻿using System;
+
+namespace AutomaticReservation_UI.ToyokoInn
 {
     /// <summary>
     /// サイト別設定（東横イン）
     /// </summary>
     public static class SiteConfig
     {
+        /// <summary>
+        /// 基底ディレクトリ
+        /// </summary>
+        public static string BaseDir = String.Format(@"{0}\AutomaticReservation_UI\ToyokoInn", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         /// <summary>
         /// (XPath) お気に入りリスト
         /// </summary>
@@ -57,5 +63,9 @@
         /// 予約が正常に終了したことを確認する文字列
         /// </summary>
         public static string STR_VALIDATE = "ご予約ありがとうございました。";
+        /// <summary>
+        /// ループごとのスリープ時間（ミリ秒）
+        /// </summary>
+        public static int TIME_SLEEP = 30000;
     }
 }

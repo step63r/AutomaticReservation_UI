@@ -133,67 +133,85 @@ namespace AutomaticReservation_UI.ViewModel
                 return _btnCancel;
             }
         }
+
+        private RelayCommand _cmdLoaded;
+        public RelayCommand CmdLoaded
+        {
+            get
+            {
+                if (_cmdLoaded == null)
+                {
+                    _cmdLoaded = new RelayCommand(Loaded, CanLoaded);
+                }
+                return _cmdLoaded;
+            }
+        }
+
+
+        private ProcessFormat _finderProcessFormat;
+        /// <summary>
+        /// 検索条件
+        /// </summary>
+        public ProcessFormat FinderProcessFormat
+        {
+            get { return _finderProcessFormat; }
+            set
+            {
+                _finderProcessFormat = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         /// <summary>
-        /// コンストラクタ（引数あり）
+        /// コンストラクタ
         /// </summary>
-        public ReservationControlViewModel(DateTime date, string name)
+        /// <param name="procFormat">予約データクラス</param>
+        public ReservationControlViewModel(ProcessFormat procFormat)
         {
-            Title = String.Format("{0} {1}", date.ToShortDateString(), name);
+            FinderProcessFormat = procFormat;
+            Title = String.Format("{0} {1}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName);
             ColorMode = ColorZoneMode.PrimaryLight;
             IconMode = PackIconKind.Play;
             ProgressBarVisibility = Visibility.Visible;
+        }
 
-            // クラスを作って
-            var model = new Reservation()
+        public void Loaded()
+        {
+            Task.Run(() =>
             {
-                // オブジェクトを渡して
-                // TODO
-                ProcFormat = new ProcessFormat()
+                // クラスを作って
+                var model = new Reservation()
                 {
-                    HotelID = new Hotel()
+                    // オブジェクトを渡して
+                    ProcFormat = FinderProcessFormat
+                };
+                try
+                {
+                    model.PropertyChanged += OnListenerPropertyChanged;
+                    // 動かす
+                    bool ret = model.Execute();
+                    model.PropertyChanged -= OnListenerPropertyChanged;
+                    if (ret)
                     {
-                        HotelID = "00146",
-                        HotelName = "品川大井町",
-                        PrefCode = 1
-                    },
-                    CheckinDate = new DateTime(2017, 2, 22),
-                    EnableNoSmoking = true,
-                    EnableSmoking = true,
-                    SmokingFirst = true,
-                    Type = new RoomType()
-                    {
-                        RoomTypeID = 10,
-                        RoomTypeName = "シングル"
-                    },
-                    CheckinValue = new CheckinTime()
-                    {
-                        CheckinValue = "23:30:00",
-                        CheckinName = "23:30-24:00"
+                        // 正常終了
+                        ColorMode = ColorZoneMode.PrimaryDark;
+                        IconMode = PackIconKind.CheckCircleOutline;
+                        ProgressBarVisibility = Visibility.Hidden;
                     }
                 }
-            };
-            // 動かす
-            try
-            {
-                bool ret = model.Execute();
-                if (ret)
+                catch
                 {
-                    // 完了
-                    ColorMode = ColorZoneMode.PrimaryDark;
-                    IconMode = PackIconKind.CheckCircleOutline;
+                    // 異常終了
+                    ColorMode = ColorZoneMode.Accent;
+                    IconMode = PackIconKind.AlertOutline;
                     ProgressBarVisibility = Visibility.Hidden;
                 }
-            }
-            catch
-            {
-                // 異常終了
-                ColorMode = ColorZoneMode.Accent;
-                IconMode = PackIconKind.AlertOutline;
-                ProgressBarVisibility = Visibility.Hidden;
-            }
-            
+            });
+        }
+        public bool CanLoaded()
+        {
+            return true;
         }
 
         /// <summary>
@@ -225,6 +243,7 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanCancel()
         {
+            // CancellationToken
             return true;
         }
 

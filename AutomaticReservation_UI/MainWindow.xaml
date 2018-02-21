@@ -59,24 +59,9 @@
                                 </DatePicker.SelectedDate>
                             </DatePicker>
                             <TextBlock Text="から1泊" Opacity="1.0" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
-                            <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" Margin="0,0,20,0">
-                                <ComboBoxItem>シングル</ComboBoxItem>
-                                <ComboBoxItem>ダブル</ComboBoxItem>
-                                <ComboBoxItem>ツイン</ComboBoxItem>
-                            </ComboBox>
-                            <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" Margin="0,0,20,0">
-                                <ComboBoxItem>15:00～16:00</ComboBoxItem>
-                                <ComboBoxItem>16:00～17:00</ComboBoxItem>
-                                <ComboBoxItem>17:00～18:00</ComboBoxItem>
-                                <ComboBoxItem>18:00～19:00</ComboBoxItem>
-                                <ComboBoxItem>19:00～20:00</ComboBoxItem>
-                                <ComboBoxItem>20:00～21:00</ComboBoxItem>
-                                <ComboBoxItem>21:00～22:00</ComboBoxItem>
-                                <ComboBoxItem>22:00～22:30</ComboBoxItem>
-                                <ComboBoxItem>22:30～23:00</ComboBoxItem>
-                                <ComboBoxItem>23:00～23:30</ComboBoxItem>
-                                <ComboBoxItem>23:30～24:00</ComboBoxItem>
-                            </ComboBox>
+                            <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" ItemsSource="{Binding Path=ColRoomType}" DisplayMemberPath="RoomTypeName" SelectedItem="{Binding Path=SelectedRoomType}" Margin="0,0,20,0"/>
+                            <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" ItemsSource="{Binding Path=ColCheckinTime}" DisplayMemberPath="CheckinName" SelectedItem="{Binding Path=SelectedCheckinTime}" Margin="0,0,20,0"/>
+
                             <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkNoSmoking}" Margin="0,0,10,0">
                                 禁煙
                             </CheckBox>

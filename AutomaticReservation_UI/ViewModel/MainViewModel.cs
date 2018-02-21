@@ -195,7 +195,7 @@ namespace AutomaticReservation_UI.ViewModel
         /// </summary>
         public void Execute()
         {
-            var item = new ReservationControlViewModel(DateTime.Now, "This is Test");
+            var item = new ReservationControlViewModel(CheckinDate, "品川大井町");
             ReservationList.Add(item);
         }
         /// <summary>

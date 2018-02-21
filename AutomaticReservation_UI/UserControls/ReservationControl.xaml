@@ -24,7 +24,9 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <TextBlock Text="LOGGING HERE" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"/>
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" x:Name="DeterminateCircularProgress" Value="0" IsIndeterminate="True" Opacity="0.2" Width="150" Height="150" Margin="0,50,0,0"/>
+                <TextBlock Text="{Binding Path=Count}" FontFamily="Georgia" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0" FontSize="36"/>
+                <TextBlock Text="{Binding Path=Message}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="20"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid>

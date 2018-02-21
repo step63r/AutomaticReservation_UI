@@ -12,7 +12,7 @@
         /// <summary>
         /// (XPath) メールアドレスフォーム
         /// </summary>
-        public static string XPATH_FORM_ADDRESS = "//*[@id=\"mainArea\"]/form/div/div[1]/div/div/ul[1]";
+        public static string XPATH_FORM_ADDRESS = "//*[@id=\"mainArea\"]/form/div/div[1]/div/div/ul[1]/li[1]/label/input";
         /// <summary>
         /// (XPath) パスワードフォーム
         /// </summary>

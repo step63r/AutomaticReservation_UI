@@ -1,15 +1,17 @@
 ﻿using AutomaticReservation_UI.Common;
+using GalaSoft.MvvmLight;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
-    public class Reservation
+    // ホントはBindableBase的な名前のクラスを継承したい。。。
+    public class Reservation : ViewModelBase, IProgressBar
     {
         // 後でどこかセーフティな場所に置く
-        protected static string LOGIN_ADDRESS = "hoge@yahoo.co.jp";
-        protected static string LOGIN_PASS = "password";
+        protected static string LOGIN_ADDRESS = "Hoge@yahoo.co.jp";
+        protected static string LOGIN_PASS = "hogepass";
         protected static string LOGIN_TEL = "09012345678";
 
         /// <summary>
@@ -17,9 +19,32 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public ProcessFormat ProcFormat;
 
+        private int _count;
+        public int Count
+        {
+            get { return _count; }
+            set
+            {
+                _count = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// 予約を実行する
         /// </summary>
+        /// <returns></returns>
         public bool Execute()
         {
             bool ret = true;
@@ -32,12 +57,15 @@ namespace AutomaticReservation_UI.ToyokoInn
                     while (true)
                     {
                         #region アクセス～詳細ページ
+                        Count += 1;
                         // アクセス
+                        Message = "アクセス中";
                         driver.Url = SiteConfig.BASE_URL;
 
                         // 「お気に入りリスト」をクリック
                         driver.FindElement(By.XPath(SiteConfig.XPATH_FAVORITE)).Click();
 
+                        Message = "ログイン中";
                         // ログイン処理
                         try
                         {
@@ -56,6 +84,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         }
 
                         // 詳細ページへ
+                        Message = "詳細ページアクセス中";
                         driver.Url = String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString());
                         #endregion
 
@@ -75,7 +104,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 ret = SearchRoom(driver, SiteConfig.XPATH_NOSMOKING);
                                 if (ret)
                                 {
-                                    // print 空室あり
+                                    Message = "禁煙　空室あり";
                                 }
                                 else
                                 {
@@ -83,11 +112,11 @@ namespace AutomaticReservation_UI.ToyokoInn
                                     ret = SearchRoom(driver, SiteConfig.XPATH_SMOKING);
                                     if (ret)
                                     {
-                                        // print 空室あり
+                                        Message = "喫煙　空室あり";
                                     }
                                     else
                                     {
-                                        // print 満室
+                                        Message = "満室";
                                     }
                                 }
                             }
@@ -97,7 +126,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 ret = SearchRoom(driver, SiteConfig.XPATH_SMOKING);
                                 if (ret)
                                 {
-                                    // print 空室あり
+                                    Message = "喫煙　空室あり";
                                 }
                                 else
                                 {
@@ -105,11 +134,11 @@ namespace AutomaticReservation_UI.ToyokoInn
                                     ret = SearchRoom(driver, SiteConfig.XPATH_NOSMOKING);
                                     if (ret)
                                     {
-                                        // print 空室あり
+                                        Message = "禁煙　空室あり";
                                     }
                                     else
                                     {
-                                        // print 満室
+                                        Message = "満室";
                                     }
                                 }
                             }
@@ -120,11 +149,11 @@ namespace AutomaticReservation_UI.ToyokoInn
                             ret = SearchRoom(driver, SiteConfig.XPATH_NOSMOKING);
                             if (ret)
                             {
-                                // print 空室あり
+                                Message = "禁煙　空室あり";
                             }
                             else
                             {
-                                // print 満室
+                                Message = "禁煙　満室";
                             }
                         }
                         else
@@ -133,16 +162,17 @@ namespace AutomaticReservation_UI.ToyokoInn
                             ret = SearchRoom(driver, SiteConfig.XPATH_SMOKING);
                             if (ret)
                             {
-                                // print 空室あり
+                                Message = "喫煙　空室あり";
                             }
                             else
                             {
-                                // print 満室
+                                Message = "喫煙　満室";
                             }
                         }
                         #endregion
 
                         #region 空室発見～予約確定
+                        Message = "予約中";
                         if (ret)
                         {
                             // 電話番号入力
@@ -164,20 +194,21 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 if (!(str_chk.Equals(SiteConfig.STR_VALIDATE)))
                                 {
                                     // 要素はあるが文字が違う
-                                    // print 空室を見つけましたが予約できませんでした
+                                    Message = "予約できませんでした";
                                     ret = false;
                                 }
                             }
                             catch (NoSuchElementException)
                             {
                                 // 要素がない
-                                // print 空室を見つけましたが予約できませんでした
+                                Message = "予約できませんでした";
                                 ret = false;
+                                // TODO 指定秒待つ
                             }
 
                             if (ret)
                             {
-                                // print 予約しました！
+                                Message = "予約完了";
                                 break;
                             }
                         }

@@ -21,7 +21,7 @@
                       mc:Ignorable="d ignore"
                       Height="768"
                       Width="1024"
-                      Title="東横イン - ホテル自動予約ツール"
+                      Title="ホテル自動予約ツール"
                       TitleForeground="White"
                       DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -37,9 +37,27 @@
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
+            <materialDesign:ColorZone Mode="Inverted" Padding="16">
+                <DockPanel>
+                    <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
+                        <ListBox>
+                            <Button Content="予約設定" ToolTip="アカウント情報などを変更します"/>
+                            <Button Content="ホテル情報更新" ToolTip="公式HPから自動でホテル情報を取得します"/>
+                        </ListBox>
+                    </materialDesign:PopupBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="18" VerticalAlignment="Center" Margin="16,0,0,0">
+                            東横INN
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+            </materialDesign:ColorZone>
+        </Grid>
+        <Grid Grid.Row="1">
             <wpf:ColorZone Mode="Standard" Padding="5" Effect="{DynamicResource MaterialDesignShadowDepth2}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -85,7 +103,7 @@
                 </Grid>
             </wpf:ColorZone>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <ScrollViewer x:Name="ParentScrollViewer" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
                 <ItemsControl ItemsSource="{Binding ReservationList}" HorizontalAlignment="Center">
                     <ItemsControl.ItemsPanel>

@@ -20,6 +20,9 @@ namespace AutomaticReservation_UI.ViewModel
         private readonly IDataService _dataService;
 
         private RelayCommand _btnExecute;
+        /// <summary>
+        /// 予約実行コマンド
+        /// </summary>
         public RelayCommand BtnExecute
         {
             get
@@ -29,6 +32,35 @@ namespace AutomaticReservation_UI.ViewModel
                     _btnExecute = new RelayCommand(Execute, CanExecute);
                 }
                 return _btnExecute;
+            }
+        }
+
+        private RelayCommand _btnConfigure;
+        /// <summary>
+        /// 予約設定コマンド
+        /// </summary>
+        public RelayCommand BtnConfigure
+        {
+            get
+            {
+                if (_btnConfigure == null)
+                {
+                    _btnConfigure = new RelayCommand(ExecuteConfigure, CanExecuteConfigure);
+                }
+                return _btnConfigure;
+            }
+        }
+
+        private RelayCommand _btnHotelUpdate;
+        public RelayCommand BtnHotelUpdate
+        {
+            get
+            {
+                if (_btnHotelUpdate == null)
+                {
+                    _btnHotelUpdate = new RelayCommand(ExecuteHotelUpdate, CanExecuteHotelUpdate);
+                }
+                return _btnHotelUpdate;
             }
         }
 
@@ -260,6 +292,24 @@ namespace AutomaticReservation_UI.ViewModel
         {
             // HotelID.Equals("") ←これは怒られるので注意
             return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking) && !(SelectedRoomType is null) && !(SelectedCheckinTime is null);
+        }
+
+        public void ExecuteConfigure()
+        {
+
+        }
+        public bool CanExecuteConfigure()
+        {
+            return true;
+        }
+
+        public void ExecuteHotelUpdate()
+        {
+
+        }
+        public bool CanExecuteHotelUpdate()
+        {
+            return true;
         }
 
         /// <summary>

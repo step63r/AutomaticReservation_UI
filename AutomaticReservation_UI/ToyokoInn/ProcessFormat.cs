@@ -150,7 +150,7 @@ namespace AutomaticReservation_UI.ToyokoInn
     /// チェックイン予定時刻クラス
     /// </summary>
     [XmlRoot("CheckinTime")]
-    public  class CheckinTime : INotifyPropertyChanged
+    public class CheckinTime : INotifyPropertyChanged
     {
         // イベントだけ実装しておく。OnPropertyChangedは使わない
         public event PropertyChangedEventHandler PropertyChanged;
@@ -192,6 +192,158 @@ namespace AutomaticReservation_UI.ToyokoInn
                 }
                 _checkinName = value;
                 PropertyChanged.Raise(() => CheckinName);
+            }
+        }
+    }
+
+    /// <summary>
+    /// ログイン情報クラス
+    /// </summary>
+    [XmlRoot("LoginInfo")]
+    public class LoginInfo : INotifyPropertyChanged
+    {
+        // イベントだけ実装しておく。OnPropertyChangedは使わない
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [XmlIgnore]
+        private string _loginAddress;
+        /// <summary>
+        /// メールアドレス
+        /// </summary>
+        [XmlElement("LoginAddress")]
+        public string LoginAddress
+        {
+            get { return _loginAddress; }
+            set
+            {
+                if (Equals(_loginAddress, value))
+                {
+                    return;
+                }
+                _loginAddress = value;
+                PropertyChanged.Raise(() => LoginAddress);
+            }
+        }
+
+        [XmlIgnore]
+        private string _loginPass;
+        /// <summary>
+        /// パスワード
+        /// </summary>
+        [XmlElement("LoginPass")]
+        public string LoginPass
+        {
+            get { return _loginPass; }
+            set
+            {
+                if (Equals(_loginPass, value))
+                {
+                    return;
+                }
+                _loginPass = value;
+                PropertyChanged.Raise(() => LoginPass);
+            }
+        }
+
+        [XmlIgnore]
+        private string _loginTel;
+        /// <summary>
+        /// 電話番号
+        /// </summary>
+        [XmlElement("LoginTel")]
+        public string LoginTel
+        {
+            get { return _loginTel; }
+            set
+            {
+                if (Equals(_loginTel, value))
+                {
+                    return;
+                }
+                _loginTel = value;
+                PropertyChanged.Raise(() => LoginTel);
+            }
+        }
+    }
+
+    /// <summary>
+    /// スクリーンショット設定クラス
+    /// </summary>
+    [XmlRoot("ScrConfig")]
+    public class ScrConfig : INotifyPropertyChanged
+    {
+        // イベントだけ実装しておく。OnPropertyChangedは使わない
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string _scrPath;
+        /// <summary>
+        /// 保存ディレクトリ
+        /// </summary>
+        public string ScrPath
+        {
+            get { return _scrPath; }
+            set
+            {
+                if (Equals(_scrPath, value))
+                {
+                    return;
+                }
+                _scrPath = value;
+                PropertyChanged.Raise(() => ScrPath);
+            }
+        }
+
+        private int _scrWidth;
+        /// <summary>
+        /// 画面サイズ 横（px）
+        /// </summary>
+        public int ScrWidth
+        {
+            get { return _scrWidth; }
+            set
+            {
+                if (Equals(_scrWidth, value))
+                {
+                    return;
+                }
+                _scrWidth = value;
+                PropertyChanged.Raise(() => ScrWidth);
+            }
+        }
+
+        private int _scrHeight;
+        /// <summary>
+        /// 画面サイズ 縦（px）
+        /// </summary>
+        public  int ScrHeight
+        {
+            get { return _scrHeight; }
+            set
+            {
+                if (Equals(_scrHeight, value))
+                {
+                    return;
+                }
+                _scrHeight = value;
+                PropertyChanged.Raise(() => ScrHeight);
+            }
+        }
+
+        private int _maxFileCount;
+        /// <summary>
+        /// 最大ファイル保持数（超えた場合は古いものから削除される）
+        /// </summary>
+        public int MaxFileCount
+        {
+            get { return _maxFileCount; }
+            set
+            {
+                if (Equals(_maxFileCount, value))
+                {
+                    return;
+                }
+                _maxFileCount = value;
+                PropertyChanged.Raise(() => MaxFileCount);
             }
         }
     }

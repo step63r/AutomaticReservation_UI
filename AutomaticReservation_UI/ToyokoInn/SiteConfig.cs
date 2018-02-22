@@ -10,7 +10,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// 基底ディレクトリ
         /// </summary>
-        public static string BaseDir = String.Format(@"{0}\AutomaticReservation_UI\ToyokoInn", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        public static string BASE_DIR = String.Format(@"{0}\AutomaticReservation_UI\ToyokoInn", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         /// <summary>
         /// (XPath) お気に入りリスト
         /// </summary>

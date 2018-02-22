@@ -272,24 +272,24 @@ namespace AutomaticReservation_UI.ViewModel
             try
             {
                 // ファイルが存在する
-                ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
+                ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BASE_DIR));
             }
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
+                XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BASE_DIR));
             }
 
             var ret2 = new ObservableCollection<CheckinTime>();
             try
             {
                 // ファイルが存在する
-                ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
+                ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BASE_DIR));
             }
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.SerializeFromCol(ColCheckinTime, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
+                XmlConverter.SerializeFromCol(ColCheckinTime, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BASE_DIR));
             }
 
             return Tuple.Create(ret1, ret2);

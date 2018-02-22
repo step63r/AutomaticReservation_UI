@@ -10,11 +10,6 @@ namespace AutomaticReservation_UI.ToyokoInn
     // ホントはBindableBase的な名前のクラスを継承したい。。。
     public class Reservation : ViewModelBase, IProgressBar
     {
-        // 後でどこかセーフティな場所に置く
-        protected static string LOGIN_ADDRESS = "hoge@yahoo.co.jp";
-        protected static string LOGIN_PASS = "password";
-        protected static string LOGIN_TEL = "09012345678";
-
         /// <summary>
         /// 予約データクラス
         /// </summary>
@@ -27,6 +22,10 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// スクリーンショット保存先パス
         /// </summary>
         public string ScreenShotPath;
+        // スクリーンショット設定
+        public ScrConfig _scrConfig;
+        // ログイン情報
+        protected LoginInfo _loginInfo;
 
         private int _count;
         public int Count
@@ -51,6 +50,16 @@ namespace AutomaticReservation_UI.ToyokoInn
         }
 
         /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public Reservation()
+        {
+            var configTuple = Load();
+            _scrConfig = configTuple.Item1;
+            _loginInfo = configTuple.Item2;
+        }
+
+        /// <summary>
         /// 予約を実行する（キャンセルチェックが多すぎて頭悪い）
         /// </summary>
         /// <returns></returns>
@@ -64,7 +73,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                 try
                 {
                     // 仮想画面サイズ設定
-                    driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
+                    driver.Manage().Window.Size = new System.Drawing.Size(_scrConfig.ScrWidth, _scrConfig.ScrHeight);
                     // 無限に繰り返す
                     while (true)
                     {
@@ -95,8 +104,8 @@ namespace AutomaticReservation_UI.ToyokoInn
                         // ログイン処理
                         try
                         {
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(LOGIN_ADDRESS);
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(LOGIN_PASS);
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(_loginInfo.LoginPass);
                             // element.Submit()でもいいかも
                             driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
                             ScreenShot(driver);
@@ -238,7 +247,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         {
                             Message = "予約中";
                             // 電話番号入力
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(LOGIN_TEL);
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(_loginInfo.LoginTel);
                             // チェックイン予定時刻
                             var chktime_element = driver.FindElement(By.XPath(SiteConfig.XPATH_CHKINTIME));
                             var chktime_select_element = new SelectElement(chktime_element);
@@ -330,6 +339,39 @@ namespace AutomaticReservation_UI.ToyokoInn
         {
             var ss = ((ITakesScreenshot)driver).GetScreenshot();
             ss.SaveAsFile(ScreenShotPath, ScreenshotImageFormat.Png);
+        }
+
+        /// <summary>
+        /// データをXMLから読み込む
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<ScrConfig, LoginInfo> Load()
+        {
+            var ret1 = new ScrConfig();
+            try
+            {
+                // ファイルが存在する
+                ret1 = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                XmlConverter.Serialize(ret1, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+            }
+
+            var ret2 = new LoginInfo();
+            try
+            {
+                // ファイルが存在する
+                ret2 = XmlConverter.DeSerialize<LoginInfo>(String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                XmlConverter.Serialize(ret2, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
+            }
+
+            return Tuple.Create(ret1, ret2);
         }
 
         /// <summary>

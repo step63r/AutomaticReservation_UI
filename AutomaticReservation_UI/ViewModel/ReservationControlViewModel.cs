@@ -15,10 +15,6 @@ namespace AutomaticReservation_UI.ViewModel
     public class ReservationControlViewModel : ViewModelBase
     {
         #region コマンド・プロパティ
-        // TODO ini化
-        public string ScrShotDir = @"D:\ProgramData\Document Files";
-        private string ScrShotPath;
-
         private string _title;
         /// <summary>
         /// GroupBoxのヘッダ
@@ -154,6 +150,9 @@ namespace AutomaticReservation_UI.ViewModel
         }
 
         private string _groupBoxToolTip;
+        /// <summary>
+        /// UserControlのツールチップ
+        /// </summary>
         public string GroupBoxToolTip
         {
             get { return _groupBoxToolTip; }
@@ -219,6 +218,11 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        // スクリーンショット設定
+        private ScrConfig _myScrConfig;
+        // Modelに渡すスクリーンショット保存パス
+        private string _scrShotPath;
         #endregion
 
         /// <summary>
@@ -233,7 +237,8 @@ namespace AutomaticReservation_UI.ViewModel
             // ツールチップ
             GroupBoxToolTip = GetGroupBoxToolTipText();
             // スクリーンショット保存先パス
-            ScrShotPath = GetScrShotFilePath(ScrShotDir);
+            _myScrConfig = Load();
+            _scrShotPath = GetScrShotFilePath(_myScrConfig.ScrPath);
 
             ColorMode = ColorZoneMode.PrimaryLight;
             IconMode = PackIconKind.Play;
@@ -281,7 +286,7 @@ namespace AutomaticReservation_UI.ViewModel
                     // オブジェクトを渡して
                     ProcFormat = FinderProcessFormat,
                     CancelToken = CancelToken,
-                    ScreenShotPath = ScrShotPath
+                    ScreenShotPath = _scrShotPath
                 };
                 try
                 {
@@ -327,7 +332,7 @@ namespace AutomaticReservation_UI.ViewModel
         {
             try
             {
-                Process.Start(ScrShotPath);
+                Process.Start(_scrShotPath);
             }
             catch
             {
@@ -388,6 +393,27 @@ namespace AutomaticReservation_UI.ViewModel
                     Message = obj.Message;
                     break;
             }
+        }
+
+        /// <summary>
+        /// データをXMLから読み込む
+        /// </summary>
+        /// <returns></returns>
+        private ScrConfig Load()
+        {
+            var ret = new ScrConfig();
+            try
+            {
+                // ファイルが存在する
+                ret = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                XmlConverter.Serialize(ret, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+            }
+
+            return ret;
         }
     }
 }

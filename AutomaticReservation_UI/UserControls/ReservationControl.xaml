@@ -14,7 +14,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Margin="10" Width="300" Height="300">
-        <GroupBox Header="{Binding Title}" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="{Binding ColorMode}">
+        <GroupBox Header="{Binding Title}" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="{Binding ColorMode}" ToolTip="{Binding Path=GroupBoxToolTip}">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -30,23 +30,41 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" x:Name="DeterminateCircularProgress" Value="0" IsIndeterminate="True" Opacity="0.2" Width="150" Height="150" Margin="0,50,0,0"/>
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" x:Name="DeterminateCircularProgress" Visibility="{Binding Path=ProgressBarVisibility}" Value="0" IsIndeterminate="True" Opacity="0.2" Width="120" Height="120" Margin="0,50,0,0"/>
                 <TextBlock Text="{Binding Path=Count}" FontFamily="Georgia" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0" FontSize="36"/>
-                <TextBlock Text="{Binding Path=Message}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="20"/>
+                <TextBlock Text="{Binding Path=Message}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="18"/>
             </Grid>
             <Grid Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Button Content="スクリーンショット" Style="{StaticResource MaterialDesignRaisedLightButton}" Command="{Binding BtnShowScreenShot}" Margin="5"/>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Button Content="キャンセル" Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding BtnCancel}" Margin="5"/>
-                    </Grid>
-                </Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" ToolTip="スクリーンショットを開く" Command="{Binding BtnShowScreenShot}" Margin="0,5,5,10">
+                        <materialDesign:PackIcon Kind="FileImage" Height="24" Width="24"/>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}" ToolTip="処理をキャンセル" Command="{Binding BtnCancel}" Margin="5,5,10,10">
+                        <materialDesign:PackIcon Kind="Stop" Height="24" Width="24"/>
+                    </Button>
+                </StackPanel>
+
+                <!--<Button Style="{StaticResource MaterialDesignRaisedLightButton}" Command="{Binding BtnShowScreenShot}" Margin="5">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="FileImage" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                        <TextBlock Text="スクリーンショット" VerticalAlignment="Center" FontSize="12"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>-->
+
+                <!--<Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding BtnCancel}" Margin="5">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="CloseCircle" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                        <TextBlock Text="キャンセル" VerticalAlignment="Center" FontSize="12"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>-->
             </Grid>
         </Grid>
     </Grid>

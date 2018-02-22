@@ -4,10 +4,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MaterialDesignThemes.Wpf;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,6 +15,10 @@ namespace AutomaticReservation_UI.ViewModel
     public class ReservationControlViewModel : ViewModelBase
     {
         #region コマンド・プロパティ
+        // TODO ini化
+        public string ScrShotDir = @"D:\ProgramData\Document Files";
+        private string ScrShotPath;
+
         private string _title;
         /// <summary>
         /// GroupBoxのヘッダ
@@ -135,6 +138,9 @@ namespace AutomaticReservation_UI.ViewModel
         }
 
         private RelayCommand _cmdLoaded;
+        /// <summary>
+        /// UserControl初期化完了後のイベントコマンド
+        /// </summary>
         public RelayCommand CmdLoaded
         {
             get
@@ -147,6 +153,16 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private string _groupBoxToolTip;
+        public string GroupBoxToolTip
+        {
+            get { return _groupBoxToolTip; }
+            set
+            {
+                _groupBoxToolTip = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private ProcessFormat _finderProcessFormat;
         /// <summary>
@@ -161,6 +177,48 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        private bool _canExecCommand;
+        /// <summary>
+        /// ボタンが押下可能かどうかを格納
+        /// </summary>
+        public bool CanExecCommand
+        {
+            get { return _canExecCommand; }
+            set
+            {
+                _canExecCommand = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private CancellationTokenSource _cancelTokenSource;
+        /// <summary>
+        /// 非同期処理をキャンセルするトークンソース
+        /// </summary>
+        public CancellationTokenSource CancelTokenSource
+        {
+            get { return _cancelTokenSource; }
+            set
+            {
+                _cancelTokenSource = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private CancellationToken _cancelToken;
+        /// <summary>
+        /// 非同期処理をキャンセルするためのトークン
+        /// </summary>
+        public CancellationToken CancelToken
+        {
+            get { return _cancelToken; }
+            set
+            {
+                _cancelToken = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         /// <summary>
@@ -170,33 +228,81 @@ namespace AutomaticReservation_UI.ViewModel
         public ReservationControlViewModel(ProcessFormat procFormat)
         {
             FinderProcessFormat = procFormat;
+            // ヘッダ（YYYY/MM/DD HotelName）
             Title = String.Format("{0} {1}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName);
+            // ツールチップ
+            GroupBoxToolTip = GetGroupBoxToolTipText();
+            // スクリーンショット保存先パス
+            ScrShotPath = GetScrShotFilePath(ScrShotDir);
+
             ColorMode = ColorZoneMode.PrimaryLight;
             IconMode = PackIconKind.Play;
             ProgressBarVisibility = Visibility.Visible;
         }
 
+        private string GetGroupBoxToolTipText()
+        {
+            string strSmoke;
+            // 禁煙・喫煙の文字列生成
+            if (FinderProcessFormat.EnableNoSmoking && FinderProcessFormat.EnableSmoking)
+            {
+                if (FinderProcessFormat.SmokingFirst)
+                {
+                    strSmoke = "喫煙 > 禁煙";
+                }
+                else
+                {
+                    strSmoke = "禁煙 > 喫煙";
+                }
+            }
+            else if (FinderProcessFormat.EnableNoSmoking)
+            {
+                strSmoke = "禁煙";
+            }
+            else
+            {
+                strSmoke = "喫煙";
+            }
+
+            return String.Format("{0} {1} {2} {3} {4}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName, FinderProcessFormat.Type.RoomTypeName, FinderProcessFormat.CheckinValue.CheckinName, strSmoke);
+        }
+
         public void Loaded()
         {
+            // キャンセルトークン取得
+            CancelTokenSource = new CancellationTokenSource();
+            CancelToken = CancelTokenSource.Token;
+
             Task.Run(() =>
             {
                 // クラスを作って
                 var model = new Reservation()
                 {
                     // オブジェクトを渡して
-                    ProcFormat = FinderProcessFormat
+                    ProcFormat = FinderProcessFormat,
+                    CancelToken = CancelToken,
+                    ScreenShotPath = ScrShotPath
                 };
                 try
                 {
                     model.PropertyChanged += OnListenerPropertyChanged;
+                    CanExecCommand = true;
                     // 動かす
                     bool ret = model.Execute();
+                    CanExecCommand = false;
                     model.PropertyChanged -= OnListenerPropertyChanged;
                     if (ret)
                     {
                         // 正常終了
                         ColorMode = ColorZoneMode.PrimaryDark;
                         IconMode = PackIconKind.CheckCircleOutline;
+                        ProgressBarVisibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        // 戻り値が false の場合も異常とみなす
+                        ColorMode = ColorZoneMode.Accent;
+                        IconMode = PackIconKind.AlertOutline;
                         ProgressBarVisibility = Visibility.Hidden;
                     }
                 }
@@ -219,7 +325,14 @@ namespace AutomaticReservation_UI.ViewModel
         /// </summary>
         public void ShowScreenShot()
         {
-
+            try
+            {
+                Process.Start(ScrShotPath);
+            }
+            catch
+            {
+                // 特に何もしない
+            }
         }
         /// <summary>
         /// スクリーンショット表示コマンドが実行可能かどうかを判定
@@ -227,7 +340,7 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanShowScreenShot()
         {
-            return true;
+            return CanExecCommand;
         }
 
         /// <summary>
@@ -235,7 +348,8 @@ namespace AutomaticReservation_UI.ViewModel
         /// </summary>
         public void Cancel()
         {
-
+            // 処理をキャンセル
+            CancelTokenSource.Cancel();
         }
         /// <summary>
         /// キャンセルコマンドが実行可能かどうかを判定
@@ -243,10 +357,25 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanCancel()
         {
-            // CancellationToken
-            return true;
+            return CanExecCommand;
         }
 
+        /// <summary>
+        /// スクリーンショットのファイルパスを取得する
+        /// </summary>
+        /// <param name="dirPath">基底ディレクトリ</param>
+        /// <returns></returns>
+        private string GetScrShotFilePath(string dirPath)
+        {
+            // dirPath\現在日時_チェックイン日付_HotelID.png
+            return String.Format(@"{0}\{1}_{2}_{3}.png", dirPath, DateTime.Now.ToString("yyyyMMddHHmmss"), FinderProcessFormat.CheckinDate.ToString("yyyyMMdd"), FinderProcessFormat.HotelID.HotelID);
+        }
+
+        /// <summary>
+        /// プログレスバーの通知ハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnListenerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var obj = (IProgressBar)sender;

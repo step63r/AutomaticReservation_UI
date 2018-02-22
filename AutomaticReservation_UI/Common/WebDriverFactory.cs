@@ -27,7 +27,7 @@ namespace AutomaticReservation_UI.Common
                     chromeDriverService.HideCommandPromptWindow = true;
                     // ブラウザを非表示にする
                     var chromeOptions = new ChromeOptions();
-                    chromeOptions.AddArguments(new List<string>() {"lang=ja" });
+                    chromeOptions.AddArguments(new List<string>() { "headless", "lang=ja" });
                     return new ChromeDriver(chromeDriverService, chromeOptions);
 
                 case AppSettings.BrowserName.Firefox:

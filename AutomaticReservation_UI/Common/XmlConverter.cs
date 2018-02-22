@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace AutomaticReservation_UI.Common
@@ -20,18 +21,11 @@ namespace AutomaticReservation_UI.Common
         {
             bool ret = false;
 
-            try
+            using (var fs = new StreamWriter(Path, false, Encoding.GetEncoding("utf-8")))
             {
-                var fs = new FileStream(Path, FileMode.Create, FileAccess.ReadWrite);
                 var serializer = new XmlSerializer(typeof(T));
                 serializer.Serialize(fs, obj);
-                fs.Close();
-
                 ret = true;
-            }
-            catch
-            {
-                // WriteLog
             }
 
             return ret;
@@ -48,18 +42,11 @@ namespace AutomaticReservation_UI.Common
         {
             bool ret = false;
 
-            try
+            using (var fs = new StreamWriter(Path, false, Encoding.GetEncoding("utf-8")))
             {
-                var fs = new FileStream(Path, FileMode.Create, FileAccess.ReadWrite);
                 var serializer = new XmlSerializer(typeof(ObservableCollection<T>));
                 serializer.Serialize(fs, obj);
-                fs.Close();
-
                 ret = true;
-            }
-            catch
-            {
-                // WriteLog
             }
 
             return ret;
@@ -75,16 +62,10 @@ namespace AutomaticReservation_UI.Common
         {
             var ret = default(T);
 
-            try
+            using (var fs = new StreamReader(Path, Encoding.GetEncoding("utf-8")))
             {
-                var fs = new FileStream(Path, FileMode.Open, FileAccess.Read);
                 var serializer = new XmlSerializer(typeof(T));
                 ret = (T)serializer.Deserialize(fs);
-                fs.Close();
-            }
-            catch
-            {
-                // WriteLog
             }
 
             return ret;
@@ -100,16 +81,10 @@ namespace AutomaticReservation_UI.Common
         {
             var ret = default(ObservableCollection<T>);
 
-            try
+            using (var fs = new StreamReader(Path, Encoding.GetEncoding("utf-8")))
             {
-                var fs = new FileStream(Path, FileMode.Open, FileAccess.Read);
                 var serializer = new XmlSerializer(typeof(ObservableCollection<T>));
                 ret = (ObservableCollection<T>)serializer.Deserialize(fs);
-                fs.Close();
-            }
-            catch
-            {
-                // WriteLog
             }
 
             return ret;

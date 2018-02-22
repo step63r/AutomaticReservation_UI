@@ -268,34 +268,28 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         private Tuple<ObservableCollection<RoomType>, ObservableCollection<CheckinTime>> Load()
         {
-            var ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
-
-            if (ret1 is null)
+            var ret1 = new ObservableCollection<RoomType>();
+            try
             {
-                ret1 = new ObservableCollection<RoomType>();
-                if (XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir)))
-                {
-                    // 成功
-                }
-                else
-                {
-                    // raise exception
-                }
+                // ファイルが存在する
+                ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BaseDir));
             }
 
-            var ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
-
-            if (ret2 is null)
+            var ret2 = new ObservableCollection<CheckinTime>();
+            try
             {
-                ret2 = new ObservableCollection<CheckinTime>();
-                if (XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir)))
-                {
-                    // 成功
-                }
-                else
-                {
-                    // raise exception
-                }
+                // ファイルが存在する
+                ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                XmlConverter.SerializeFromCol(ColCheckinTime, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BaseDir));
             }
 
             return Tuple.Create(ret1, ret2);

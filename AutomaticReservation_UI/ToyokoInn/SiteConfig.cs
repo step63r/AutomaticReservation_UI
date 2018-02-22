@@ -28,13 +28,13 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_LOGINBTN = "//*[@id=\"linkLogin\"]";
         /// <summary>
-        /// (XPath) 禁煙
+        /// (XPath) 予約ボタン（INTEGER -> 任意の数字）
         /// </summary>
-        public static string XPATH_NOSMOKING = "//*[@id=\"mainArea\"]/section[1]/div[1]/div/div[2]/div[3]/ul/li/a/span";
+        public static string XPATH_RESERVEBTN = "//*[@id=\"mainArea\"]/section[1]/div[INTEGER]/div/div[2]/div[3]/ul/li/a/span";
         /// <summary>
-        /// (XPath) 喫煙
+        /// (XPath) 禁煙か喫煙かを判断する要素（INTEGER -> 任意の数字）
         /// </summary>
-        public static string XPATH_SMOKING = "//*[@id=\"mainArea\"]/section[1]/div[2]/div/div[2]/div[3]/ul/li/a/span";
+        public static string XPATH_SMOKELABEL = "//*[@id=\"mainArea\"]/section[1]/h2[INTEGER]/em/span";
         /// <summary>
         /// (XPath) 連絡先電話番号
         /// </summary>

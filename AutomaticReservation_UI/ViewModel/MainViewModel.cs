@@ -295,7 +295,6 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanExecute()
         {
-            // HotelID.Equals("") ←これは怒られるので注意
             return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking) && !(SelectedRoomType is null) && !(SelectedCheckinTime is null);
         }
 

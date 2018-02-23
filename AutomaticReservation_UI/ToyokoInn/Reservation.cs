@@ -7,7 +7,9 @@ using System.Threading;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
-    // ホントはBindableBase的な名前のクラスを継承したい。。。
+    /// <summary>
+    /// 予約モデルクラス（東横INN）
+    /// </summary>
     public class Reservation : ViewModelBase, IProgressBar
     {
         /// <summary>
@@ -124,7 +126,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         catch (Exception ex)
                         {
                             // [TODO] raise exception
-                            Message = ex.ToString();
+                            Message = ex.Message;
                             break;
                         }
                         if (CheckCancel())
@@ -304,7 +306,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                 catch (Exception ex)
                 {
                     // [TODO] raise exception
-                    Message = ex.ToString();
+                    Message = ex.Message;
                 }
                 finally
                 {

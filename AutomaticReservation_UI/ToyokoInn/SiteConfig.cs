@@ -36,6 +36,18 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_SMOKELABEL = "//*[@id=\"mainArea\"]/section[1]/h2[INTEGER]/em/span";
         /// <summary>
+        /// (XPath) ホテル一覧ページの都道府県名（ITER_PREF -> 任意の数字）
+        /// </summary>
+        public static string XPATH_PREFNAME = "//*[@id=\"mainArea\"]/section[ITER_PREF]/h4/em";
+        /// <summary>
+        /// (XPath) ホテル一覧ページのホテルID（ITER_PREF, ITER_HOTEL -> 任意の数字）
+        /// </summary>
+        public static string XPATH_HOTELID = "//*[@id=\"mainArea\"]/section[ITER_PREF]/section[ITER_HOTEL]/div/div[1]/span";
+        /// <summary>
+        /// (XPath) ホテル一覧ページのホテル名（ITER_PREF, ITER_HOTEL -> 任意の数字）
+        /// </summary>
+        public static string XPATH_HOTELNAME = "//*[@id=\"mainArea\"]/section[ITER_PREF]/section[ITER_HOTEL]/div/div[2]/a";
+        /// <summary>
         /// (XPath) 連絡先電話番号
         /// </summary>
         public static string XPATH_TEL = "//*[@id=\"mainArea\"]/section[2]/div/div[2]/div/div[1]/table/tbody/tr[7]/td/span/input";

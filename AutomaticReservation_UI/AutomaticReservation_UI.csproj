@@ -109,6 +109,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\AppSettings.cs" />
     <Compile Include="Common\AsyncCommandBase.cs" />
+    <Compile Include="Common\CsvConverter.cs" />
     <Compile Include="Common\DataFormat.cs" />
     <Compile Include="Common\IAsyncCommand.cs" />
     <Compile Include="Common\IProgressBar.cs" />

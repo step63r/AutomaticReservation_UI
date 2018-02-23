@@ -11,6 +11,7 @@
                       xmlns:ctrl="clr-namespace:AutomaticReservation_UI.UserControls"
                       xmlns:vm="clr-namespace:AutomaticReservation_UI.ViewModel"
                       xmlns:common="clr-namespace:AutomaticReservation_UI.Common"
+                      xmlns:system="clr-namespace:System;assembly=mscorlib"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular"
                       TextElement.FontSize="13"
@@ -34,92 +35,123 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid x:Name="LayoutRoot">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <materialDesign:ColorZone Mode="Inverted" Padding="16">
-                <DockPanel>
-                    <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
-                        <ListBox>
-                            <Button Content="予約設定" ToolTip="アカウント情報などを変更します"/>
-                            <Button Content="ホテル情報更新" ToolTip="公式HPから自動でホテル情報を取得します"/>
-                        </ListBox>
-                    </materialDesign:PopupBox>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontSize="18" VerticalAlignment="Center" Margin="16,0,0,0">
-                            東横INN
-                        </TextBlock>
-                    </StackPanel>
-                </DockPanel>
-            </materialDesign:ColorZone>
-        </Grid>
-        <Grid Grid.Row="1">
-            <wpf:ColorZone Mode="Standard" Padding="5" Effect="{DynamicResource MaterialDesignShadowDepth2}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
+    <materialDesign:DialogHost>
+        <Grid x:Name="LayoutRoot">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <materialDesign:ColorZone Mode="Inverted" Padding="16">
+                    <DockPanel>
+                        <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
+                            <ListBox>
+                                <Button Content="予約設定" Command="{Binding Path=BtnConfigure}" ToolTip="アカウント情報などを変更します">
+                                </Button>
+                                <Button Content="ホテル情報更新" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" ToolTip="公式HPから自動でホテル情報を取得します">
+                                    <!--Dialog-->
+                                    <Button.CommandParameter>
+                                        <Grid Margin="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" VerticalAlignment="Center">
+                                                <TextBlock Text="公式ホームページから最新のホテル一覧を自動で取得します。&#10;回線速度によっては数十分かかることがあります。&#10;&#10;※取得した情報は次回起動時より有効になります。&#10;" FontSize="14" TextWrapping="WrapWithOverflow"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <Button Content="実行" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <!--Dialog-->
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="10">
+                                                                <TextBlock Text="取得中..." FontSize="14" HorizontalAlignment="Center"/>
+                                                                <ProgressBar Style="{DynamicResource MaterialDesignCircularProgressBar}" HorizontalAlignment="Center" Margin="16" IsIndeterminate="True" Value="0" />
+                                                                <Button Content="キャンセル" Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                    </Button>
+                                                    <Button Content="キャンセル" IsCancel="True" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+                                    </Button.CommandParameter>
+                                </Button>
+                            </ListBox>
+                        </materialDesign:PopupBox>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox materialDesign:HintAssist.Hint="ホテルID" Text="{Binding Path=HotelID}" Width="100" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                            <DatePicker x:Name="TargetDatePicker" Width="100" materialDesign:HintAssist.Hint="宿泊日" VerticalAlignment="Center">
-                                <DatePicker.SelectedDate>
-                                    <Binding Path="CheckinDate" UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <domain:FutureDateValidationRule ValidatesOnTargetUpdated="True"/>
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </DatePicker.SelectedDate>
-                            </DatePicker>
-                            <TextBlock Text="から1泊" Opacity="1.0" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
-                            <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" ItemsSource="{Binding Path=ColRoomType}" DisplayMemberPath="RoomTypeName" SelectedItem="{Binding Path=SelectedRoomType}" Margin="0,0,20,0"/>
-                            <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" ItemsSource="{Binding Path=ColCheckinTime}" DisplayMemberPath="CheckinName" SelectedItem="{Binding Path=SelectedCheckinTime}" Margin="0,0,20,0"/>
-
-                            <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkNoSmoking}" Margin="0,0,10,0">
-                                禁煙
-                            </CheckBox>
-                            <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkSmoking}" Margin="0,0,10,0">
-                                喫煙
-                            </CheckBox>
-                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Path=IsSmokingFirst}" Margin="0,0,5,0">
-                                <ToggleButton.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource BoolMultiConverter}">
-                                        <Binding Path="ChkNoSmoking"/>
-                                        <Binding Path="ChkSmoking"/>
-                                    </MultiBinding>
-                                </ToggleButton.IsEnabled>
-                            </ToggleButton>
-                            <TextBlock Text="喫煙を優先" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Margin="16,0,0,0">
+                            東横INN
+                            </TextBlock>
                         </StackPanel>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+            </Grid>
+            <Grid Grid.Row="1">
+                <wpf:ColorZone Mode="Standard" Padding="5" Effect="{DynamicResource MaterialDesignShadowDepth2}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox materialDesign:HintAssist.Hint="ホテルID" Text="{Binding Path=HotelID}" Width="100" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <DatePicker x:Name="TargetDatePicker" Width="100" materialDesign:HintAssist.Hint="宿泊日" VerticalAlignment="Center">
+                                    <DatePicker.SelectedDate>
+                                        <Binding Path="CheckinDate" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <domain:FutureDateValidationRule ValidatesOnTargetUpdated="True"/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </DatePicker.SelectedDate>
+                                </DatePicker>
+                                <TextBlock Text="から1泊" Opacity="1.0" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
+                                <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" ItemsSource="{Binding Path=ColRoomType}" DisplayMemberPath="RoomTypeName" SelectedItem="{Binding Path=SelectedRoomType}" Margin="0,0,20,0"/>
+                                <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" ItemsSource="{Binding Path=ColCheckinTime}" DisplayMemberPath="CheckinName" SelectedItem="{Binding Path=SelectedCheckinTime}" Margin="0,0,20,0"/>
+
+                                <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkNoSmoking}" Margin="0,0,10,0">
+                                    禁煙
+                                </CheckBox>
+                                <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkSmoking}" Margin="0,0,10,0">
+                                    喫煙
+                                </CheckBox>
+                                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Path=IsSmokingFirst}" Margin="0,0,5,0">
+                                    <ToggleButton.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource BoolMultiConverter}">
+                                            <Binding Path="ChkNoSmoking"/>
+                                            <Binding Path="ChkSmoking"/>
+                                        </MultiBinding>
+                                    </ToggleButton.IsEnabled>
+                                </ToggleButton>
+                                <TextBlock Text="喫煙を優先" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Button Content="{materialDesign:PackIcon Play}" Command="{Binding BtnExecute}" HorizontalAlignment="Right" Width="80"/>
+                        </Grid>
                     </Grid>
-                    <Grid Grid.Column="1">
-                        <Button Content="{materialDesign:PackIcon Play}" Command="{Binding BtnExecute}" HorizontalAlignment="Right" Width="80"/>
-                    </Grid>
-                </Grid>
-            </wpf:ColorZone>
-        </Grid>
-        <Grid Grid.Row="2">
-            <ScrollViewer x:Name="ParentScrollViewer" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
-                <ItemsControl ItemsSource="{Binding ReservationList}" HorizontalAlignment="Center">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:ReservationControlViewModel}">
-                            <ctrl:ReservationControl/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-            <!-- ★★★　サンプル　★★★ -->
-            <!--<Grid Grid.Column="0" Grid.Row="0" Margin="10">
+                </wpf:ColorZone>
+            </Grid>
+            <Grid Grid.Row="2">
+                <ScrollViewer x:Name="ParentScrollViewer" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                    <ItemsControl ItemsSource="{Binding ReservationList}" HorizontalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ReservationControlViewModel}">
+                                <ctrl:ReservationControl/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <!-- ★★★　サンプル　★★★ -->
+                <!--<Grid Grid.Column="0" Grid.Row="0" Margin="10">
                     <GroupBox Header="2018/02/18 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryLight">
                         <GroupBox.HeaderTemplate>
                             <DataTemplate>
@@ -155,7 +187,8 @@
                         </GroupBox.HeaderTemplate>
                     </GroupBox>
                 </Grid>-->
+            </Grid>
         </Grid>
-    </Grid>
-    <!--</Grid>-->
+        <!--</Grid>-->
+    </materialDesign:DialogHost>
 </Controls:MetroWindow>

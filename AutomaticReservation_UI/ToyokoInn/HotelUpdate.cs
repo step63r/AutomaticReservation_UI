@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutomaticReservation_UI.Common;
-using CsvHelper;
+﻿using AutomaticReservation_UI.Common;
 using OpenQA.Selenium;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {

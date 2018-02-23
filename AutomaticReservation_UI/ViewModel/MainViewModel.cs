@@ -1,8 +1,10 @@
 ﻿using AutomaticReservation_UI.Common;
+using AutomaticReservation_UI.Domain;
 using AutomaticReservation_UI.Model;
 using AutomaticReservation_UI.ToyokoInn;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
 
@@ -52,6 +54,9 @@ namespace AutomaticReservation_UI.ViewModel
         }
 
         private RelayCommand _btnHotelUpdate;
+        /// <summary>
+        /// ホテル情報更新コマンド
+        /// </summary>
         public RelayCommand BtnHotelUpdate
         {
             get
@@ -300,16 +305,20 @@ namespace AutomaticReservation_UI.ViewModel
         }
         public bool CanExecuteConfigure()
         {
-            return true;
+            return false;
         }
 
         public void ExecuteHotelUpdate()
         {
-
         }
         public bool CanExecuteHotelUpdate()
         {
             return true;
+        }
+
+        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        {
+
         }
 
         /// <summary>

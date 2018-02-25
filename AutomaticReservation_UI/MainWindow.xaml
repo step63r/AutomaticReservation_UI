@@ -11,7 +11,7 @@
                       xmlns:ctrl="clr-namespace:AutomaticReservation_UI.UserControls"
                       xmlns:vm="clr-namespace:AutomaticReservation_UI.ViewModel"
                       xmlns:common="clr-namespace:AutomaticReservation_UI.Common"
-                      xmlns:system="clr-namespace:System;assembly=mscorlib"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular"
                       TextElement.FontSize="13"
@@ -35,7 +35,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <materialDesign:DialogHost>
+    <materialDesign:DialogHost DialogContent="{Binding Path=DialogView}" IsOpen="{Binding Path=IsDialogOpen}">
         <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -49,36 +49,7 @@
                             <ListBox>
                                 <Button Content="予約設定" Command="{Binding Path=BtnConfigure}" ToolTip="アカウント情報などを変更します">
                                 </Button>
-                                <Button Content="ホテル情報更新" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" ToolTip="公式HPから自動でホテル情報を取得します">
-                                    <!--Dialog-->
-                                    <Button.CommandParameter>
-                                        <Grid Margin="10">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid Grid.Row="0" VerticalAlignment="Center">
-                                                <TextBlock Text="公式ホームページから最新のホテル一覧を自動で取得します。&#10;回線速度によっては数十分かかることがあります。&#10;&#10;※取得した情報は次回起動時より有効になります。&#10;" FontSize="14" TextWrapping="WrapWithOverflow"/>
-                                            </Grid>
-                                            <Grid Grid.Row="1">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <Button Content="実行" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
-                                                        <!--Dialog-->
-                                                        <Button.CommandParameter>
-                                                            <StackPanel Margin="10">
-                                                                <TextBlock Text="取得中..." FontSize="14" HorizontalAlignment="Center"/>
-                                                                <ProgressBar Style="{DynamicResource MaterialDesignCircularProgressBar}" HorizontalAlignment="Center" Margin="16" IsIndeterminate="True" Value="0" />
-                                                                <Button Content="キャンセル" Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" HorizontalAlignment="Center"/>
-                                                            </StackPanel>
-                                                        </Button.CommandParameter>
-                                                    </Button>
-                                                    <Button Content="キャンセル" IsCancel="True" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </Grid>
-                                    </Button.CommandParameter>
-                                </Button>
+                                <Button Content="ホテル情報更新" Command="{Binding Path=BtnHotelUpdate}" ToolTip="公式HPから自動でホテル情報を取得します"/>
                             </ListBox>
                         </materialDesign:PopupBox>
                         <StackPanel Orientation="Horizontal">

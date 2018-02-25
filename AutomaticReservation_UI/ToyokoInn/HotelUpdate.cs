@@ -113,7 +113,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                 }
 
                 // csvファイルに出力
-                CsvConverter.Serialize(HotelList, String.Format(@"{0}\HotelList.csv"));
+                CsvConverter.Serialize(HotelList, String.Format(@"{0}\HotelList.csv", SiteConfig.BASE_DIR));
             }
         }
     }

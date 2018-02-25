@@ -126,10 +126,21 @@
     <Compile Include="ToyokoInn\Reservation.cs" />
     <Compile Include="ToyokoInn\SiteConfig.cs" />
     <Compile Include="ToyokoInn\ProcessFormat.cs" />
+    <Compile Include="UserControls\MaterialDialogOk.xaml.cs">
+      <DependentUpon>MaterialDialogOk.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MaterialDialogOkCancel.xaml.cs">
+      <DependentUpon>MaterialDialogOkCancel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MaterialDialogProcessing.xaml.cs">
+      <DependentUpon>MaterialDialogProcessing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ReservationControl.xaml.cs">
       <DependentUpon>ReservationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MaterialDialogOkCancelViewModel.cs" />
+    <Compile Include="ViewModel\MaterialDialogOkViewModel.cs" />
     <Compile Include="ViewModel\ReservationControlViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
@@ -147,6 +158,18 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MaterialDialogOk.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MaterialDialogOkCancel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MaterialDialogProcessing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ReservationControl.xaml">
       <SubType>Designer</SubType>
@@ -177,6 +200,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Compile Include="ViewModel\MaterialDialogProcessingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

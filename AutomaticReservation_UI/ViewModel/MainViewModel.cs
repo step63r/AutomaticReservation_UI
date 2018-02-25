@@ -2,11 +2,13 @@
 using AutomaticReservation_UI.Domain;
 using AutomaticReservation_UI.Model;
 using AutomaticReservation_UI.ToyokoInn;
+using AutomaticReservation_UI.UserControls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace AutomaticReservation_UI.ViewModel
 {
@@ -221,7 +223,6 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-
         public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
         private ReservationControlViewModel _reservationViewModel;
         public ReservationControlViewModel ReservationViewModel
@@ -233,6 +234,45 @@ namespace AutomaticReservation_UI.ViewModel
             set
             {
                 _reservationViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+        private object _dialogView;
+        public object DialogView
+        {
+            get
+            {
+                return _dialogView;
+            }
+            set
+            {
+                _dialogView = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _isDialogOpen;
+        public bool IsDialogOpen
+        {
+            get
+            {
+                return _isDialogOpen;
+            }
+            set
+            {
+                _isDialogOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+        private MaterialDialogOkCancelViewModel _okCancelViewModel;
+        public MaterialDialogOkCancelViewModel OkCancelViewModel
+        {
+            get
+            {
+                return _okCancelViewModel;
+            }
+            set
+            {
+                _okCancelViewModel = value;
                 RaisePropertyChanged();
             }
         }
@@ -301,24 +341,34 @@ namespace AutomaticReservation_UI.ViewModel
 
         public void ExecuteConfigure()
         {
-
         }
         public bool CanExecuteConfigure()
         {
             return false;
         }
 
+        /// <summary>
+        /// ホテル情報更新を実行する
+        /// </summary>
         public void ExecuteHotelUpdate()
         {
+            // OKボタンにバインドするActionを生成
+            var model = new HotelUpdate();
+            // Dialogに表示するViewModelを生成
+            var vm = new MaterialDialogOkCancelViewModel()
+            {
+                Message = "公式ホームページから最新のホテル一覧を自動で取得します。\r\n回線速度によっては数十分かかることがあります。\r\n\r\n※取得した情報は次回起動時より有効になります。\r\n"
+            };
+            // Viewを生成（本当は使いたくないけど。。。）
+            DialogView = new MaterialDialogOkCancel()
+            {
+                DataContext = vm
+            };
+            IsDialogOpen = true;
         }
         public bool CanExecuteHotelUpdate()
         {
             return true;
-        }
-
-        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
-        {
-
         }
 
         /// <summary>

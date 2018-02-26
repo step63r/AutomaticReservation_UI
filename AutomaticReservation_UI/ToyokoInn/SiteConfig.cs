@@ -36,17 +36,21 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_SMOKELABEL = "//*[@id=\"mainArea\"]/section[1]/h2[INTEGER]/em/span";
         /// <summary>
-        /// (XPath) ホテル一覧ページの都道府県名（ITER_PREF -> 任意の数字）
+        /// (XPath) ホテル一覧ページの都道府県名（ITER_REGION, ITER_PREF -> 任意の数字）
         /// </summary>
-        public static string XPATH_PREFNAME = "//*[@id=\"mainArea\"]/section[ITER_PREF]/h4/em";
+        public static string XPATH_PREFNAME = "//*[@id=\"mainArea\"]/section[ITER_REGION]/h4[ITER_PREF]/em";
         /// <summary>
-        /// (XPath) ホテル一覧ページのホテルID（ITER_PREF, ITER_HOTEL -> 任意の数字）
+        /// (XPath) ホテル一覧ページのホテルID（ITER_REGION, ITER_HOTEL -> 任意の数字）
         /// </summary>
-        public static string XPATH_HOTELID = "//*[@id=\"mainArea\"]/section[ITER_PREF]/section[ITER_HOTEL]/div/div[1]/span";
+        public static string XPATH_HOTELID = "//*[@id=\"mainArea\"]/section[ITER_REGION]/section[ITER_HOTEL]/div/div[1]/span";
         /// <summary>
-        /// (XPath) ホテル一覧ページのホテル名（ITER_PREF, ITER_HOTEL -> 任意の数字）
+        /// (XPath) ホテル一覧ページのホテル名（ITER_REGION, ITER_HOTEL -> 任意の数字）
         /// </summary>
-        public static string XPATH_HOTELNAME = "//*[@id=\"mainArea\"]/section[ITER_PREF]/section[ITER_HOTEL]/div/div[2]/a";
+        public static string XPATH_HOTELNAME = "//*[@id=\"mainArea\"]/section[ITER_REGION]/section[ITER_HOTEL]/div/div[2]/a";
+        /// <summary>
+        /// (XPath) ホテル一覧ページの住所（ITER_REGION, ITER_HOTEL -> 任意の数字）
+        /// </summary>
+        public static string XPATH_ADDRESS = "//*[@id=\"mainArea\"]/section[ITER_REGION]/section[ITER_HOTEL]/div/div[3]";
         /// <summary>
         /// (XPath) 連絡先電話番号
         /// </summary>

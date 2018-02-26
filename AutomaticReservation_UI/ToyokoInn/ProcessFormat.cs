@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using System.ComponentModel;
 using AutomaticReservation_UI.Common;
-using CsvHelper.Configuration;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
@@ -30,32 +29,70 @@ namespace AutomaticReservation_UI.ToyokoInn
     /// <summary>
     /// ホテルクラス
     /// </summary>
-    public class Hotel
+    [XmlRoot("Hotel")]
+    public class Hotel : INotifyPropertyChanged
     {
+        // イベントだけ実装しておく。OnPropertyChangedは使わない
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [XmlIgnore]
+        private string _hotelID;
         /// <summary>
         /// ホテルID
         /// </summary>
-        public string HotelID { get; set; }
+        [XmlElement("HotelID")]
+        public string HotelID
+        {
+            get { return _hotelID; }
+            set
+            {
+                if (Equals(_hotelID, value))
+                {
+                    return;
+                }
+                _hotelID = value;
+                PropertyChanged.Raise(() => HotelID);
+            }
+        }
+
+        [XmlIgnore]
+        private int _prefCode;
         /// <summary>
         /// 都道府県コード
         /// </summary>
-        public int PrefCode { get; set; }
+        [XmlElement("PrefCode")]
+        public int PrefCode
+        {
+            get { return _prefCode; }
+            set
+            {
+                if (Equals(_prefCode, value))
+                {
+                    return;
+                }
+                _prefCode = value;
+                PropertyChanged.Raise(() => PrefCode);
+            }
+        }
+
+        [XmlIgnore]
+        private string _hotelName;
         /// <summary>
         /// ホテル名
         /// </summary>
-        public string HotelName { get; set; }
-    }
-
-    /// <summary>
-    /// ホテルクラスのCSVマッピングクラス
-    /// </summary>
-    public sealed class HotelMap : ClassMap<Hotel>
-    {
-        public HotelMap()
+        [XmlElement("HotelName")]
+        public string HotelName
         {
-            Map(x => x.HotelID).Index(0);
-            Map(x => x.PrefCode).Index(1);
-            Map(x => x.HotelName).Index(2);
+            get { return _hotelName; }
+            set
+            {
+                if (Equals(_hotelName, value))
+                {
+                    return;
+                }
+                _hotelName = value;
+                PropertyChanged.Raise(() => HotelName);
+            }
         }
     }
 
@@ -278,7 +315,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// 画面サイズ 縦（px）
         /// </summary>
-        public  int ScrHeight
+        public int ScrHeight
         {
             get { return _scrHeight; }
             set

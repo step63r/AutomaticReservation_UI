@@ -11,7 +11,6 @@
                       xmlns:ctrl="clr-namespace:AutomaticReservation_UI.UserControls"
                       xmlns:vm="clr-namespace:AutomaticReservation_UI.ViewModel"
                       xmlns:common="clr-namespace:AutomaticReservation_UI.Common"
-                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular"
                       TextElement.FontSize="13"
@@ -46,9 +45,9 @@
                     <DockPanel>
                         <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
                             <ListBox>
-                                <Button Content="予約設定" Command="{Binding Path=BtnConfigure}" ToolTip="アカウント情報などを変更します">
-                                </Button>
+                                <Button Content="予約設定" Command="{Binding Path=BtnConfigure}" ToolTip="アカウント情報などを変更します"/>
                                 <Button Content="ホテル情報更新" Command="{Binding Path=BtnHotelUpdate}" ToolTip="公式HPから自動でホテル情報を取得します"/>
+                                <Button Content="ライセンス表示" Command="{Binding Path=BtnShowLicense}" ToolTip="ライセンスを表示します"/>
                             </ListBox>
                         </materialDesign:PopupBox>
                         <StackPanel Orientation="Horizontal">

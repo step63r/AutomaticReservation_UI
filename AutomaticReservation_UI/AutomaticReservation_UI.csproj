@@ -140,6 +140,9 @@
     <Compile Include="UserControls\MaterialDialogOkCancel.xaml.cs">
       <DependentUpon>MaterialDialogOkCancel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\MaterialDialogOkScroll.xaml.cs">
+      <DependentUpon>MaterialDialogOkScroll.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MaterialDialogProcessing.xaml.cs">
       <DependentUpon>MaterialDialogProcessing.xaml</DependentUpon>
     </Compile>
@@ -170,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MaterialDialogOkCancel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MaterialDialogOkScroll.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

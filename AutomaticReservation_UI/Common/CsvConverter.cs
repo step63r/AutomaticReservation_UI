@@ -23,7 +23,7 @@ namespace AutomaticReservation_UI.Common
         /// <returns>成功したらtrue、失敗したらfalse</returns>
         public static bool Serialize<T>(ObservableCollection<T> obj, string path)
         {
-            bool ret = true;
+            bool ret = false;
             try
             {
                 using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))

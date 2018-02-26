@@ -1,15 +1,14 @@
 ﻿using AutomaticReservation_UI.Common;
-using AutomaticReservation_UI.Domain;
 using AutomaticReservation_UI.Model;
 using AutomaticReservation_UI.ToyokoInn;
 using AutomaticReservation_UI.UserControls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AutomaticReservation_UI.ViewModel
@@ -70,6 +69,22 @@ namespace AutomaticReservation_UI.ViewModel
                     _btnHotelUpdate = new RelayCommand(ExecuteHotelUpdate, CanExecuteHotelUpdate);
                 }
                 return _btnHotelUpdate;
+            }
+        }
+
+        private RelayCommand _btnShowLicense;
+        /// <summary>
+        /// ライセンス表示コマンド
+        /// </summary>
+        public RelayCommand BtnShowLicense
+        {
+            get
+            {
+                if (_btnShowLicense == null)
+                {
+                    _btnShowLicense = new RelayCommand(ExecuteShowLicense, CanExecuteShowLicense);
+                }
+                return _btnShowLicense;
             }
         }
 
@@ -446,6 +461,7 @@ namespace AutomaticReservation_UI.ViewModel
 
         public void ExecuteConfigure()
         {
+
         }
         public bool CanExecuteConfigure()
         {
@@ -464,6 +480,24 @@ namespace AutomaticReservation_UI.ViewModel
             IsDialogOpen = true;
         }
         public bool CanExecuteHotelUpdate()
+        {
+            return true;
+        }
+
+        public void ExecuteShowLicense()
+        {
+            using (var fs = new StreamReader(String.Format(@"{0}\License.txt", CommonPath.CommonDir), Encoding.GetEncoding("utf-8")))
+            {
+                Message = fs.ReadToEnd();
+            }
+            DType = DialogType.License;
+            DialogView = new MaterialDialogOkScroll()
+            {
+                DataContext = this
+            };
+            IsDialogOpen = true;
+        }
+        public bool CanExecuteShowLicense()
         {
             return true;
         }
@@ -525,6 +559,12 @@ namespace AutomaticReservation_UI.ViewModel
                             break;
                     }
                     break;
+
+                case DialogType.License:
+                    // ダイアログを閉じる
+                    IsDialogOpen = false;
+                    DialogView = null;
+                    break;
             }
         }
 
@@ -555,7 +595,7 @@ namespace AutomaticReservation_UI.ViewModel
             try
             {
                 // ファイルが存在する
-                ret2 = CsvConverter.DeSerialize<Hotel, HotelMap>(String.Format(@"{0}\HotelList.csv", SiteConfig.BASE_DIR));
+                ret2 = XmlConverter.DeSerializeToCol<Hotel>(String.Format(@"{0}\HotelList.xml", SiteConfig.BASE_DIR));
             }
             catch
             {

@@ -20,7 +20,8 @@ namespace AutomaticReservation_UI.Common
     public enum DialogType
     {
         Configure,
-        HotelUpdate
+        HotelUpdate,
+        License
     }
 
     /// <summary>

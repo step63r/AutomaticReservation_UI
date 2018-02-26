@@ -286,20 +286,20 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 break;
                             }
                         }
-                        if (CheckCancel())
-                        {
-                            Message = "キャンセルされました";
-                            break;
-                        }
-
                         // 指定秒待つ
                         Message = "スレッド待機中...";
-                        Thread.Sleep(SiteConfig.TIME_SLEEP);
-                        if (CheckCancel())
+                        // キャンセル可能なスレッド休止にした
+                        if (CancelToken.WaitHandle.WaitOne(SiteConfig.TIME_SLEEP))
                         {
                             Message = "キャンセルされました";
                             break;
                         }
+                        //Thread.Sleep(SiteConfig.TIME_SLEEP);
+                        //if (CheckCancel())
+                        //{
+                            //Message = "キャンセルされました";
+                            //break;
+                        //}
                         #endregion
                     }
                 }

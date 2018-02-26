@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using System.ComponentModel;
 using AutomaticReservation_UI.Common;
+using CsvHelper.Configuration;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
@@ -29,70 +30,32 @@ namespace AutomaticReservation_UI.ToyokoInn
     /// <summary>
     /// ホテルクラス
     /// </summary>
-    [XmlRoot("Hotel")]
-    public class Hotel : INotifyPropertyChanged
+    public class Hotel
     {
-        // イベントだけ実装しておく。OnPropertyChangedは使わない
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [XmlIgnore]
-        private string _hotelID;
         /// <summary>
         /// ホテルID
         /// </summary>
-        [XmlElement("HotelID")]
-        public string HotelID
-        {
-            get { return _hotelID; }
-            set
-            {
-                if (Equals(_hotelID, value))
-                {
-                    return;
-                }
-                _hotelID = value;
-                PropertyChanged.Raise(() => HotelID);
-            }
-        }
-
-        [XmlIgnore]
-        private int _prefCode;
+        public string HotelID { get; set; }
         /// <summary>
         /// 都道府県コード
         /// </summary>
-        [XmlElement("PrefCode")]
-        public int PrefCode
-        {
-            get { return _prefCode; }
-            set
-            {
-                if (Equals(_prefCode, value))
-                {
-                    return;
-                }
-                _prefCode = value;
-                PropertyChanged.Raise(() => PrefCode);
-            }
-        }
-
-        [XmlIgnore]
-        private string _hotelName;
+        public int PrefCode { get; set; }
         /// <summary>
         /// ホテル名
         /// </summary>
-        [XmlElement("HotelName")]
-        public string HotelName
+        public string HotelName { get; set; }
+    }
+
+    /// <summary>
+    /// ホテルクラスのCSVマッピングクラス
+    /// </summary>
+    public sealed class HotelMap : ClassMap<Hotel>
+    {
+        public HotelMap()
         {
-            get { return _hotelName; }
-            set
-            {
-                if (Equals(_hotelName, value))
-                {
-                    return;
-                }
-                _hotelName = value;
-                PropertyChanged.Raise(() => HotelName);
-            }
+            Map(x => x.HotelID).Index(0);
+            Map(x => x.PrefCode).Index(1);
+            Map(x => x.HotelName).Index(2);
         }
     }
 

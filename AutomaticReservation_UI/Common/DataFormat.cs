@@ -15,6 +15,15 @@ namespace AutomaticReservation_UI.Common
     }
 
     /// <summary>
+    /// ダイアログ種別
+    /// </summary>
+    public enum DialogType
+    {
+        Configure,
+        HotelUpdate
+    }
+
+    /// <summary>
     /// 都道府県コードクラス
     /// </summary>
     public class PrefCode

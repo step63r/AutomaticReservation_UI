@@ -4,14 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:vm="clr-namespace:AutomaticReservation_UI.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <!-- ViewModelクラス -->
-    <UserControl.DataContext>
-        <vm:MaterialDialogOkCancelViewModel/>
-    </UserControl.DataContext>
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -23,15 +20,19 @@
         </Grid>
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="実行" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
-                    <Button.CommandParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Button.CommandParameter>
+                <Button Content="実行" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AcceptDialog"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </Button>
-                <Button Content="キャンセル" IsCancel="True" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
-                    <Button.CommandParameter>
-                        <system:Boolean>False</system:Boolean>
-                    </Button.CommandParameter>
+                <Button Content="キャンセル" IsCancel="True" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignFlatButton}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CancelDialog"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </Button>
             </StackPanel>
         </Grid>

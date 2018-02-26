@@ -25,7 +25,6 @@
                       Title="ホテル自動予約ツール"
                       TitleForeground="White"
                       DataContext="{Binding Main, Source={StaticResource Locator}}">
-
     <Window.Resources>
         <ResourceDictionary>
             <common:BoolAndMultiConverter x:Key="BoolMultiConverter"/>
@@ -69,7 +68,8 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
-                                <TextBox materialDesign:HintAssist.Hint="ホテルID" Text="{Binding Path=HotelID}" Width="100" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <ComboBox materialDesign:HintAssist.Hint="都道府県" ItemsSource="{Binding Path=ColPrefCode}" DisplayMemberPath="PrefName" SelectedItem="{Binding Path=SelectedPrefCode}" Margin="0,0,20,0"/>
+                                <ComboBox materialDesign:HintAssist.Hint="ホテル名" ItemsSource="{Binding Path=ColLimitedHotel}" DisplayMemberPath="HotelName" SelectedItem="{Binding Path=SelectedHotel}" Margin="0,0,20,0"/>
                                 <DatePicker x:Name="TargetDatePicker" Width="100" materialDesign:HintAssist.Hint="宿泊日" VerticalAlignment="Center">
                                     <DatePicker.SelectedDate>
                                         <Binding Path="CheckinDate" UpdateSourceTrigger="PropertyChanged">

@@ -14,11 +14,15 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// 都道府県コード一覧
         /// </summary>
-        public ObservableCollection<PrefCode> PrefCodeList { get; set; }
+        private ObservableCollection<PrefCode> PrefCodeList;
         /// <summary>
         /// ホテル一覧
         /// </summary>
-        public ObservableCollection<Hotel> HotelList { get; set; }
+        private ObservableCollection<Hotel> HotelList;
+        /// <summary>
+        ///  処理結果
+        /// </summary>
+        public bool Result = false;
 
         public HotelUpdate()
         {
@@ -38,6 +42,8 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public void Execute()
         {
+            HotelList = new ObservableCollection<Hotel>();
+
             // ドライバ初期化
             using (var driver = WebDriverFactory.CreateInstance(AppSettings.BrowserName.Chrome))
             {
@@ -68,6 +74,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                     catch
                     {
                         // 都道府県コードCSVにない場合は（海外）スキップ
+                        iter_pref++;
                         continue;
                     }
 
@@ -114,6 +121,9 @@ namespace AutomaticReservation_UI.ToyokoInn
 
                 // csvファイルに出力
                 CsvConverter.Serialize(HotelList, String.Format(@"{0}\HotelList.csv", SiteConfig.BASE_DIR));
+
+                // 処理成功
+                Result = true;
             }
         }
     }

@@ -4,6 +4,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace AutomaticReservation_UI.Common
 {
@@ -24,9 +26,9 @@ namespace AutomaticReservation_UI.Common
             bool ret = true;
             try
             {
-                using (TextWriter writer = File.CreateText(path))
+                using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
-                    var csvWriter = new CsvWriter(writer);
+                    var csvWriter = new CsvWriter(new StreamWriter(fs, Encoding.GetEncoding("shift_jis")));
                     csvWriter.WriteRecords(obj);
 
                     ret = true;
@@ -53,9 +55,9 @@ namespace AutomaticReservation_UI.Common
             {
                 using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    var csv = new CsvReader(new StreamReader(fs));
+                    var csv = new CsvReader(new StreamReader(fs, Encoding.GetEncoding("shift_jis")));
                     csv.Configuration.RegisterClassMap<M>();
-                    ret = (ObservableCollection<T>)csv.GetRecords<T>();
+                    ret = new ObservableCollection<T>(csv.GetRecords<T>().ToList());
                 }
             }
             catch (Exception ex)

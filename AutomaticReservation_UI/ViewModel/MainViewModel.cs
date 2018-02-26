@@ -9,6 +9,8 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AutomaticReservation_UI.ViewModel
 {
@@ -18,7 +20,7 @@ namespace AutomaticReservation_UI.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, IHasDialog
     {
         #region コマンド・プロパティ
         private readonly IDataService _dataService;
@@ -71,19 +73,91 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
-        private string _hotelID;
+        #region 検索条件
+        private ObservableCollection<PrefCode> _colPrefCode;
         /// <summary>
-        /// ホテルID
+        /// 都道府県コードコレクション
         /// </summary>
-        public string HotelID
+        public ObservableCollection<PrefCode> ColPrefCode
         {
             get
             {
-                return _hotelID;
+                return _colPrefCode;
             }
             set
             {
-                _hotelID = value;
+                _colPrefCode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private PrefCode _selectedPrefCode;
+        /// <summary>
+        /// 選択された都道府県コード
+        /// </summary>
+        public PrefCode SelectedPrefCode
+        {
+            get
+            {
+                return _selectedPrefCode;
+            }
+            set
+            {
+                _selectedPrefCode = value;
+                RaisePropertyChanged();
+
+                // ホテルの表示内容を変更する
+                ColLimitedHotel = new ObservableCollection<Hotel>(ColHotel.Where(item => item.PrefCode.Equals(value.ID)));
+            }
+        }
+
+        private ObservableCollection<Hotel> _colHotel;
+        /// <summary>
+        /// ホテルコレクション
+        /// </summary>
+        public ObservableCollection<Hotel> ColHotel
+        {
+            get
+            {
+                return _colHotel;
+            }
+            set
+            {
+                _colHotel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<Hotel> _colLimitedHotel;
+        /// <summary>
+        /// 表示用のホテルコレクション
+        /// </summary>
+        public ObservableCollection<Hotel> ColLimitedHotel
+        {
+            get
+            {
+                return _colLimitedHotel;
+            }
+            set
+            {
+                _colLimitedHotel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private Hotel _selectedHotel;
+        /// <summary>
+        /// 選択されたホテル
+        /// </summary>
+        public Hotel SelectedHotel
+        {
+            get
+            {
+                return _selectedHotel;
+            }
+            set
+            {
+                _selectedHotel = value;
                 RaisePropertyChanged();
             }
         }
@@ -223,21 +297,47 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
-        private ReservationControlViewModel _reservationViewModel;
-        public ReservationControlViewModel ReservationViewModel
+        #endregion
+
+        #region Dialog系
+        private DialogType _dType;
+        /// <summary>
+        /// 開いているダイアログ種別
+        /// </summary>
+        public DialogType DType
         {
             get
             {
-                return _reservationViewModel;
+                return _dType;
             }
             set
             {
-                _reservationViewModel = value;
+                _dType = value;
                 RaisePropertyChanged();
             }
         }
+
+        private string _message;
+        /// <summary>
+        /// ダイアログメッセージ
+        /// </summary>
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private object _dialogView;
+        /// <summary>
+        /// アクティブなDialogView
+        /// </summary>
         public object DialogView
         {
             get
@@ -250,7 +350,11 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
         private bool _isDialogOpen;
+        /// <summary>
+        /// Dialogが表示中かどうか
+        /// </summary>
         public bool IsDialogOpen
         {
             get
@@ -263,16 +367,19 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-        private MaterialDialogOkCancelViewModel _okCancelViewModel;
-        public MaterialDialogOkCancelViewModel OkCancelViewModel
+        #endregion
+
+        public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
+        private ReservationControlViewModel _reservationViewModel;
+        public ReservationControlViewModel ReservationViewModel
         {
             get
             {
-                return _okCancelViewModel;
+                return _reservationViewModel;
             }
             set
             {
-                _okCancelViewModel = value;
+                _reservationViewModel = value;
                 RaisePropertyChanged();
             }
         }
@@ -298,8 +405,10 @@ namespace AutomaticReservation_UI.ViewModel
             ChkSmoking = false;
 
             var displayTuple = Load();
-            ColRoomType = displayTuple.Item1;
-            ColCheckinTime = displayTuple.Item2;
+            ColPrefCode = displayTuple.Item1;
+            ColHotel = displayTuple.Item2;
+            ColRoomType = displayTuple.Item3;
+            ColCheckinTime = displayTuple.Item4;
         }
 
         /// <summary>
@@ -312,12 +421,9 @@ namespace AutomaticReservation_UI.ViewModel
             {
                 HotelID = new Hotel()
                 {
-                    // ----- ----- ----- ----- -----
-                    // Test Code
-                    // ----- ----- ----- ----- -----
-                    HotelID = HotelID,
-                    HotelName = "品川大井町",
-                    PrefCode = 14
+                    HotelID = SelectedHotel.HotelID,
+                    HotelName = SelectedHotel.HotelName,
+                    PrefCode = SelectedHotel.PrefCode
                 },
                 CheckinDate = CheckinDate,
                 Type = SelectedRoomType,
@@ -335,7 +441,7 @@ namespace AutomaticReservation_UI.ViewModel
         /// <returns></returns>
         public bool CanExecute()
         {
-            return !(String.IsNullOrEmpty(HotelID)) && !(!ChkNoSmoking && !ChkSmoking) && !(SelectedRoomType is null) && !(SelectedCheckinTime is null);
+            return !(SelectedPrefCode is null) && !(SelectedHotel is null) && !(!ChkNoSmoking && !ChkSmoking) && !(SelectedRoomType is null) && !(SelectedCheckinTime is null);
         }
 
         public void ExecuteConfigure()
@@ -346,22 +452,14 @@ namespace AutomaticReservation_UI.ViewModel
             return false;
         }
 
-        /// <summary>
-        /// ホテル情報更新を実行する
-        /// </summary>
+        // Dialogに表示するViewModelを生成
         public void ExecuteHotelUpdate()
         {
-            // OKボタンにバインドするActionを生成
-            var model = new HotelUpdate();
-            // Dialogに表示するViewModelを生成
-            var vm = new MaterialDialogOkCancelViewModel()
-            {
-                Message = "公式ホームページから最新のホテル一覧を自動で取得します。\r\n回線速度によっては数十分かかることがあります。\r\n\r\n※取得した情報は次回起動時より有効になります。\r\n"
-            };
-            // Viewを生成（本当は使いたくないけど。。。）
+            Message = "公式ホームページから最新のホテル一覧を自動で取得します。\r\n回線速度によっては数十分かかることがあります。\r\n\r\n※取得した情報は次回起動時より有効になります。\r\n";
+            DType = DialogType.HotelUpdate;
             DialogView = new MaterialDialogOkCancel()
             {
-                DataContext = vm
+                DataContext = this
             };
             IsDialogOpen = true;
         }
@@ -370,37 +468,126 @@ namespace AutomaticReservation_UI.ViewModel
             return true;
         }
 
+        public async void AcceptDialog()
+        {
+            // ダイアログ種別で分岐
+            switch (DType)
+            {
+                case DialogType.Configure:
+                    break;
+
+                case DialogType.HotelUpdate:
+                    // Viewの型で更に分岐
+                    switch (DialogView)
+                    {
+                        case MaterialDialogOkCancel okCancelDialog:
+                            // ダイアログを閉じる
+                            IsDialogOpen = false;
+                            DialogView = null;
+
+                            // 次のダイアログを表示する
+                            Message = "処理中...";
+                            DialogView = new MaterialDialogProcessing()
+                            {
+                                DataContext = this
+                            };
+                            IsDialogOpen = true;
+
+                            // 処理モデル定義
+                            var model = new HotelUpdate();
+                            await Task.Run(() =>
+                            {
+                                // 処理実行
+                                model.Execute();
+                            });
+
+                            // 処理成功
+                            if (model.Result)
+                            {
+                                // ダイアログを閉じる
+                                IsDialogOpen = false;
+                                DialogView = null;
+
+                                // 次のダイアログを表示する
+                                Message = "完了しました\r\n";
+                                DialogView = new MaterialDialogOk()
+                                {
+                                    DataContext = this
+                                };
+                                IsDialogOpen = true;
+                            }
+                            break;
+
+                        case MaterialDialogOk okDialog:
+                            // ダイアログを閉じる
+                            IsDialogOpen = false;
+                            DialogView = null;
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        public void CancelDialog()
+        {
+            IsDialogOpen = false;
+        }
+
         /// <summary>
         /// データをXMLから読み込む
         /// </summary>
         /// <returns></returns>
-        private Tuple<ObservableCollection<RoomType>, ObservableCollection<CheckinTime>> Load()
+        private Tuple<ObservableCollection<PrefCode>, ObservableCollection<Hotel>, ObservableCollection<RoomType>, ObservableCollection<CheckinTime>> Load()
         {
-            var ret1 = new ObservableCollection<RoomType>();
+            var ret1 = new ObservableCollection<PrefCode>();
             try
             {
                 // ファイルが存在する
-                ret1 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BASE_DIR));
+                ret1 = CsvConverter.DeSerialize<PrefCode, PrefCodeMap>(String.Format(@"{0}\PrefCode.csv", CommonPath.CommonDir));
             }
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.SerializeFromCol(ColRoomType, String.Format(@"{0}\RoomType.xml", SiteConfig.BASE_DIR));
+                // raise exception
             }
 
-            var ret2 = new ObservableCollection<CheckinTime>();
+            var ret2 = new ObservableCollection<Hotel>();
             try
             {
                 // ファイルが存在する
-                ret2 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BASE_DIR));
+                ret2 = CsvConverter.DeSerialize<Hotel, HotelMap>(String.Format(@"{0}\HotelList.csv", SiteConfig.BASE_DIR));
             }
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.SerializeFromCol(ColCheckinTime, String.Format(@"{0}\CheckinTime.xml", SiteConfig.BASE_DIR));
+                // raise exception
             }
 
-            return Tuple.Create(ret1, ret2);
+            var ret3 = new ObservableCollection<RoomType>();
+            try
+            {
+                // ファイルが存在する
+                ret3 = XmlConverter.DeSerializeToCol<RoomType>(String.Format(@"{0}\RoomType.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                // raise exception
+            }
+
+            var ret4 = new ObservableCollection<CheckinTime>();
+            try
+            {
+                // ファイルが存在する
+                ret4 = XmlConverter.DeSerializeToCol<CheckinTime>(String.Format(@"{0}\CheckinTime.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                // raise exception
+            }
+
+            return Tuple.Create(ret1, ret2, ret3, ret4);
         }
 
         ////public override void Cleanup()

@@ -358,7 +358,7 @@ namespace AutomaticReservation_UI.ToyokoInn
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.Serialize(ret1, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                // raise exception
             }
 
             var ret2 = new LoginInfo();
@@ -370,7 +370,7 @@ namespace AutomaticReservation_UI.ToyokoInn
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.Serialize(ret2, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
+                // raise exception
             }
 
             return Tuple.Create(ret1, ret2);

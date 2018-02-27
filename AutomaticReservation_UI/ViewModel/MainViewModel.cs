@@ -384,6 +384,41 @@ namespace AutomaticReservation_UI.ViewModel
         }
         #endregion
 
+        #region Config系
+        private LoginInfo _currentLoginInfo;
+        /// <summary>
+        /// 現在のアカウント設定
+        /// </summary>
+        public LoginInfo CurrentLoginInfo
+        {
+            get
+            {
+                return _currentLoginInfo;
+            }
+            set
+            {
+                _currentLoginInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+        private ScrConfig _currentScrConfig;
+        /// <summary>
+        /// 現在のスクリーンショット設定
+        /// </summary>
+        public ScrConfig CurrentScrConfig
+        {
+            get
+            {
+                return _currentScrConfig;
+            }
+            set
+            {
+                _currentScrConfig = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
         private ReservationControlViewModel _reservationViewModel;
         public ReservationControlViewModel ReservationViewModel
@@ -461,11 +496,21 @@ namespace AutomaticReservation_UI.ViewModel
 
         public void ExecuteConfigure()
         {
+            // データ読み出し
+            var configTuple = LoadConfig();
+            CurrentScrConfig = configTuple.Item1;
+            CurrentLoginInfo = configTuple.Item2;
 
+            DType = DialogType.Configure;
+            DialogView = new UserSettingsDialog()
+            {
+                DataContext = this
+            };
+            IsDialogOpen = true;
         }
         public bool CanExecuteConfigure()
         {
-            return false;
+            return true;
         }
 
         // Dialogに表示するViewModelを生成
@@ -508,6 +553,13 @@ namespace AutomaticReservation_UI.ViewModel
             switch (DType)
             {
                 case DialogType.Configure:
+                    // 設定を保存
+                    XmlConverter.Serialize(CurrentScrConfig, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                    XmlConverter.Serialize(CurrentLoginInfo, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
+
+                    // ダイアログを閉じる
+                    IsDialogOpen = false;
+                    DialogView = null;
                     break;
 
                 case DialogType.HotelUpdate:
@@ -571,6 +623,7 @@ namespace AutomaticReservation_UI.ViewModel
         public void CancelDialog()
         {
             IsDialogOpen = false;
+            DialogView = null;
         }
 
         /// <summary>
@@ -628,6 +681,39 @@ namespace AutomaticReservation_UI.ViewModel
             }
 
             return Tuple.Create(ret1, ret2, ret3, ret4);
+        }
+
+        /// <summary>
+        /// 設定データをXMLから読み込む
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<ScrConfig, LoginInfo> LoadConfig()
+        {
+            var ret1 = new ScrConfig();
+            try
+            {
+                // ファイルが存在する
+                ret1 = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                // raise exception
+            }
+
+            var ret2 = new LoginInfo();
+            try
+            {
+                // ファイルが存在する
+                ret2 = XmlConverter.DeSerialize<LoginInfo>(String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+                // raise exception
+            }
+
+            return Tuple.Create(ret1, ret2);
         }
 
         ////public override void Cleanup()

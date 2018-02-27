@@ -275,10 +275,12 @@ namespace AutomaticReservation_UI.ToyokoInn
         // イベントだけ実装しておく。OnPropertyChangedは使わない
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [XmlIgnore]
         private string _scrPath;
         /// <summary>
         /// 保存ディレクトリ
         /// </summary>
+        [XmlElement("ScrPath")]
         public string ScrPath
         {
             get { return _scrPath; }
@@ -293,10 +295,12 @@ namespace AutomaticReservation_UI.ToyokoInn
             }
         }
 
+        [XmlIgnore]
         private int _scrWidth;
         /// <summary>
         /// 画面サイズ 横（px）
         /// </summary>
+        [XmlElement("ScrWidth")]
         public int ScrWidth
         {
             get { return _scrWidth; }
@@ -311,10 +315,12 @@ namespace AutomaticReservation_UI.ToyokoInn
             }
         }
 
+        [XmlIgnore]
         private int _scrHeight;
         /// <summary>
         /// 画面サイズ 縦（px）
         /// </summary>
+        [XmlElement("ScrHeight")]
         public int ScrHeight
         {
             get { return _scrHeight; }
@@ -329,10 +335,12 @@ namespace AutomaticReservation_UI.ToyokoInn
             }
         }
 
+        [XmlIgnore]
         private int _maxFileCount;
         /// <summary>
         /// 最大ファイル保持数（超えた場合は古いものから削除される）
         /// </summary>
+        [XmlElement("MaxFileCount")]
         public int MaxFileCount
         {
             get { return _maxFileCount; }

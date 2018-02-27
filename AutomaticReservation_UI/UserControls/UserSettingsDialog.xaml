@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="AutomaticReservation_UI.UserControls.UserSettingsDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:domain="clr-namespace:AutomaticReservation_UI.Domain"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="520" d:DesignWidth="420">
+    
+    <Grid Margin="10" Width="400">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="アカウント設定"/>
+                <TextBox wpf:HintAssist.Hint="メールアドレス" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                    <TextBox.Text>
+                        <Binding Path="CurrentLoginInfo.LoginAddress" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <!--あとでこっちにする Livet.SecurePasswordBoxとか？-->
+                <!--<PasswordBox wpf:HintAssist.Hint="パスワード" Margin="0,0,0,10">
+                </PasswordBox>-->
+                <TextBox wpf:HintAssist.Hint="パスワード" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                    <TextBox.Text>
+                        <Binding Path="CurrentLoginInfo.LoginPass" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox wpf:HintAssist.Hint="TEL" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                    <TextBox.Text>
+                        <Binding Path="CurrentLoginInfo.LoginTel" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Text="スクリーンショット設定"/>
+                <TextBox wpf:HintAssist.Hint="保存先" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                    <TextBox.Text>
+                        <Binding Path="CurrentScrConfig.ScrPath" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox wpf:HintAssist.Hint="幅" Width="50" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                        <TextBox.Text>
+                            <Binding Path="CurrentScrConfig.ScrWidth" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="px" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBlock Text="✕" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBox wpf:HintAssist.Hint="縦" Width="50" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                        <TextBox.Text>
+                            <Binding Path="CurrentScrConfig.ScrHeight" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Text="px" VerticalAlignment="Bottom" Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="OK" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AcceptDialog"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Content="キャンセル" IsCancel="True" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignFlatButton}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CancelDialog"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

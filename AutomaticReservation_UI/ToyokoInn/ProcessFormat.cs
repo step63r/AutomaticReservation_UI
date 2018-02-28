@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using System.ComponentModel;
 using AutomaticReservation_UI.Common;
+using System.Security;
 
 namespace AutomaticReservation_UI.ToyokoInn
 {
@@ -226,12 +227,12 @@ namespace AutomaticReservation_UI.ToyokoInn
         }
 
         [XmlIgnore]
-        private string _loginPass;
+        private SecureString _loginPass;
         /// <summary>
         /// パスワード
         /// </summary>
         [XmlElement("LoginPass")]
-        public string LoginPass
+        public SecureString LoginPass
         {
             get { return _loginPass; }
             set

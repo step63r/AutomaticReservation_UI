@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:domain="clr-namespace:AutomaticReservation_UI.Domain"
+             xmlns:common="clr-namespace:AutomaticReservation_UI.Common"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              mc:Ignorable="d" 
@@ -27,18 +28,11 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <!--あとでこっちにする Livet.SecurePasswordBoxとか？-->
-                <!--<PasswordBox wpf:HintAssist.Hint="パスワード" Margin="0,0,0,10">
-                </PasswordBox>-->
-                <TextBox wpf:HintAssist.Hint="パスワード" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
-                    <TextBox.Text>
-                        <Binding Path="CurrentLoginInfo.LoginPass" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
+                <PasswordBox wpf:HintAssist.Hint="パスワード" PasswordChar="●" Margin="0,0,0,10">
+                    <i:Interaction.Behaviors>
+                        <common:SecurePasswordBindingBehavior SecurePassword="{Binding Path=CurrentLoginInfo.LoginPass}"/>
+                    </i:Interaction.Behaviors>
+                </PasswordBox>
                 <TextBox wpf:HintAssist.Hint="TEL" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
                     <TextBox.Text>
                         <Binding Path="CurrentLoginInfo.LoginTel" UpdateSourceTrigger="PropertyChanged">

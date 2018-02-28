@@ -107,7 +107,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         try
                         {
                             driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(_loginInfo.LoginPass);
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(SecureStringConverter.SecureToPlain(_loginInfo.LoginPass));
                             // element.Submit()でもいいかも
                             driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
                             ScreenShot(driver);

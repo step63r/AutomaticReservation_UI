@@ -122,6 +122,9 @@
     <Compile Include="Common\IHasDialog.cs" />
     <Compile Include="Common\IProgressBar.cs" />
     <Compile Include="Common\PropertyChangedEventHandlerExtensions.cs" />
+    <Compile Include="Common\SecurePasswordBindingBehavior.cs" />
+    <Compile Include="Common\SecureStringConverter.cs" />
+    <Compile Include="Common\SecureStringEx.cs" />
     <Compile Include="Common\WebDriverFactory.cs" />
     <Compile Include="Common\XamlConverter.cs" />
     <Compile Include="Common\XmlConverter.cs" />

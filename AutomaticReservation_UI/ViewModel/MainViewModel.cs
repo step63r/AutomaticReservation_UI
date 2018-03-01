@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -417,11 +418,11 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-        private string _currentAesPass;
+        private SecureString _currentAesPass;
         /// <summary>
         /// 暗号化された現在のパスワード（UserControlにバインド）
         /// </summary>
-        public string CurrentAesPass
+        public SecureString CurrentAesPass
         {
             get
             {
@@ -518,11 +519,12 @@ namespace AutomaticReservation_UI.ViewModel
             CurrentLoginInfo = configTuple.Item2;
             try
             {
-                CurrentAesPass = AesEncrypt.DecryptFromBase64(configTuple.Item2.LoginPass, AesKeyConf.key, AesKeyConf.iv);
+                //CurrentAesPass = AesEncrypt.DecryptFromBase64(configTuple.Item2.LoginPass, AesKeyConf.key, AesKeyConf.iv);
+                CurrentAesPass = SecureStringConverter.PlainToSecure(AesEncrypt.DecryptFromBase64(configTuple.Item2.LoginPass, AesKeyConf.key, AesKeyConf.iv));
             }
             catch
             {
-                //CurrentAesPass = new SecureString();
+                CurrentAesPass = new SecureString();
             }
 
             DType = DialogType.Configure;
@@ -579,7 +581,7 @@ namespace AutomaticReservation_UI.ViewModel
                 case DialogType.Configure:
                     // 設定を保存
                     XmlConverter.Serialize(CurrentScrConfig, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
-                    CurrentLoginInfo.LoginPass = AesEncrypt.EncryptToBase64(CurrentAesPass, AesKeyConf.key, AesKeyConf.iv);
+                    CurrentLoginInfo.LoginPass = AesEncrypt.EncryptToBase64(SecureStringConverter.SecureToPlain(CurrentAesPass), AesKeyConf.key, AesKeyConf.iv);
                     XmlConverter.Serialize(CurrentLoginInfo, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
 
                     // ダイアログを閉じる

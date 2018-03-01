@@ -28,10 +28,10 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <PasswordBox wpf:HintAssist.Hint="パスワード" Margin="0,0,0,10" common:PasswordBoxHelper.IsAttached="True" common:PasswordBoxHelper.Password="{Binding Path=CurrentAesPass}">
-                    <!--<i:Interaction.Behaviors>
-                        <common:SecurePasswordBindingBehavior SecurePassword="{Binding Path=CurrentAesPass}"/>
-                    </i:Interaction.Behaviors>-->
+                <PasswordBox wpf:HintAssist.Hint="パスワード" Margin="0,0,0,10">
+                    <i:Interaction.Behaviors>
+                        <common:SecurePasswordBindingBehavior SecurePassword="{Binding CurrentAesPass, Mode=TwoWay}"/>
+                    </i:Interaction.Behaviors>
                 </PasswordBox>
                 <TextBox wpf:HintAssist.Hint="TEL" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
                     <TextBox.Text>

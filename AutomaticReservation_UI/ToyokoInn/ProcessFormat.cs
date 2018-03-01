@@ -227,12 +227,12 @@ namespace AutomaticReservation_UI.ToyokoInn
         }
 
         [XmlIgnore]
-        private SecureString _loginPass;
+        private string _loginPass;
         /// <summary>
-        /// パスワード
+        /// パスワード（暗号化する）
         /// </summary>
         [XmlElement("LoginPass")]
-        public SecureString LoginPass
+        public string LoginPass
         {
             get { return _loginPass; }
             set

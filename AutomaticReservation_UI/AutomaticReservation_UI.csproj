@@ -114,6 +114,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\AesEncrypt.cs" />
     <Compile Include="Common\AppSettings.cs" />
     <Compile Include="Common\AsyncCommandBase.cs" />
     <Compile Include="Common\CsvConverter.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Common\IAsyncCommand.cs" />
     <Compile Include="Common\IHasDialog.cs" />
     <Compile Include="Common\IProgressBar.cs" />
+    <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Common\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="Common\SecurePasswordBindingBehavior.cs" />
     <Compile Include="Common\SecureStringConverter.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="ToyokoInn\AesKeyConf.cs" />
     <Compile Include="ToyokoInn\HotelUpdate.cs" />
     <Compile Include="ToyokoInn\Reservation.cs" />
     <Compile Include="ToyokoInn\SiteConfig.cs" />

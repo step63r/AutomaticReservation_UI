@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security;
 
 namespace AutomaticReservation_UI.ViewModel
 {
@@ -418,6 +417,22 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private string _currentAesPass;
+        /// <summary>
+        /// 暗号化された現在のパスワード（UserControlにバインド）
+        /// </summary>
+        public string CurrentAesPass
+        {
+            get
+            {
+                return _currentAesPass;
+            }
+            set
+            {
+                _currentAesPass = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         public ObservableCollection<ReservationControlViewModel> ReservationList { get; set; } = new ObservableCollection<ReservationControlViewModel>();
@@ -501,6 +516,14 @@ namespace AutomaticReservation_UI.ViewModel
             var configTuple = LoadConfig();
             CurrentScrConfig = configTuple.Item1;
             CurrentLoginInfo = configTuple.Item2;
+            try
+            {
+                CurrentAesPass = AesEncrypt.DecryptFromBase64(configTuple.Item2.LoginPass, AesKeyConf.key, AesKeyConf.iv);
+            }
+            catch
+            {
+                //CurrentAesPass = new SecureString();
+            }
 
             DType = DialogType.Configure;
             DialogView = new UserSettingsDialog()
@@ -556,6 +579,7 @@ namespace AutomaticReservation_UI.ViewModel
                 case DialogType.Configure:
                     // 設定を保存
                     XmlConverter.Serialize(CurrentScrConfig, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                    CurrentLoginInfo.LoginPass = AesEncrypt.EncryptToBase64(CurrentAesPass, AesKeyConf.key, AesKeyConf.iv);
                     XmlConverter.Serialize(CurrentLoginInfo, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
 
                     // ダイアログを閉じる

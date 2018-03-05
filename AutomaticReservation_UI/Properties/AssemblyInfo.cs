@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AutomaticReservation_UI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("自動予約ツール")]
+[assembly: AssemblyDescription("ホテルの予約を自動で行うツールです。")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("AutomaticReservation_UI")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCompany("minato project")]
+[assembly: AssemblyCopyright("Copyright © minato 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.0.1")]
-[assembly: AssemblyFileVersion("0.0.0.1")]
+[assembly: AssemblyVersion("2018.3.5.0")]
+[assembly: AssemblyFileVersion("2018.3.5.1")]

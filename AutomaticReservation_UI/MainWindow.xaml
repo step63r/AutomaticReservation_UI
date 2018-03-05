@@ -23,7 +23,8 @@
                       Width="1024"
                       Title="ホテル自動予約ツール"
                       TitleForeground="White"
-                      DataContext="{Binding Main, Source={StaticResource Locator}}">
+                      DataContext="{Binding Main, Source={StaticResource Locator}}"
+                      Closing="MetroWindow_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <common:BoolAndMultiConverter x:Key="BoolMultiConverter"/>
@@ -120,45 +121,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                <!-- ★★★　サンプル　★★★ -->
-                <!--<Grid Grid.Column="0" Grid.Row="0" Margin="10">
-                    <GroupBox Header="2018/02/18 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryLight">
-                        <GroupBox.HeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Play" Height="32" Width="32" VerticalAlignment="Center"/>
-                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GroupBox.HeaderTemplate>
-                    </GroupBox>
-                </Grid>
-                <Grid Grid.Column="1" Grid.Row="0" Margin="10">
-                    <GroupBox Header="2018/02/19 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryDark">
-                        <GroupBox.HeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="CheckCircleOutline" Height="32" Width="32" VerticalAlignment="Center"/>
-                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GroupBox.HeaderTemplate>
-                    </GroupBox>
-                </Grid>
-                <Grid Grid.Column="2" Grid.Row="0" Margin="10">
-                    <GroupBox Header="2018/02/20 品川大井町" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="Accent">
-                        <GroupBox.HeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="AlertOutline" Height="32" Width="32" VerticalAlignment="Center"/>
-                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GroupBox.HeaderTemplate>
-                    </GroupBox>
-                </Grid>-->
             </Grid>
         </Grid>
-        <!--</Grid>-->
     </materialDesign:DialogHost>
 </Controls:MetroWindow>

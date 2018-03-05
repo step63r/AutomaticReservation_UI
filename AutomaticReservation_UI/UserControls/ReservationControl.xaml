@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             xmlns:local="clr-namespace:AutomaticReservation_UI.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="320" d:DesignWidth="320">
+             d:DesignHeight="320" d:DesignWidth="320"
+             Visibility="{Binding ControlVisibility}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding CmdLoaded}"/>
@@ -42,29 +42,10 @@
                     <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}" ToolTip="処理をキャンセル" Command="{Binding BtnCancel}" Margin="5,5,10,10">
                         <materialDesign:PackIcon Kind="Stop" Height="24" Width="24"/>
                     </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}" ToolTip="閉じる" Command="{Binding BtnClose}" Margin="0,5,5,10">
+                        <materialDesign:PackIcon Kind="Delete" Height="24" Width="24"/>
+                    </Button>
                 </StackPanel>
-
-                <!--<Button Style="{StaticResource MaterialDesignRaisedLightButton}" Command="{Binding BtnShowScreenShot}" Margin="5">
-                            <Button.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="FileImage" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                        <TextBlock Text="スクリーンショット" VerticalAlignment="Center" FontSize="12"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </Button.ContentTemplate>
-                        </Button>-->
-
-                <!--<Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding BtnCancel}" Margin="5">
-                            <Button.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="CloseCircle" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                        <TextBlock Text="キャンセル" VerticalAlignment="Center" FontSize="12"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </Button.ContentTemplate>
-                        </Button>-->
             </Grid>
         </Grid>
     </Grid>

@@ -133,6 +133,22 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private RelayCommand _btnClose;
+        /// <summary>
+        /// 閉じるボタン
+        /// </summary>
+        public RelayCommand BtnClose
+        {
+            get
+            {
+                if (_btnClose == null)
+                {
+                    _btnClose = new RelayCommand(CloseControl, CanCloseControl);
+                }
+                return _btnClose;
+            }
+        }
+
         private RelayCommand _cmdLoaded;
         /// <summary>
         /// UserControl初期化完了後のイベントコマンド
@@ -219,6 +235,20 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private Visibility _controlVisibility;
+        /// <summary>
+        /// UserControlのVisibility
+        /// </summary>
+        public Visibility ControlVisibility
+        {
+            get { return _controlVisibility; }
+            set
+            {
+                _controlVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+
         // スクリーンショット設定
         private ScrConfig _myScrConfig;
         // Modelに渡すスクリーンショット保存パス
@@ -243,6 +273,7 @@ namespace AutomaticReservation_UI.ViewModel
             ColorMode = ColorZoneMode.PrimaryLight;
             IconMode = PackIconKind.Play;
             ProgressBarVisibility = Visibility.Visible;
+            ControlVisibility = Visibility.Visible;
         }
 
         private string GetGroupBoxToolTipText()
@@ -363,6 +394,23 @@ namespace AutomaticReservation_UI.ViewModel
         public bool CanCancel()
         {
             return CanExecCommand;
+        }
+
+        /// <summary>
+        /// 閉じるコマンドを実行
+        /// </summary>
+        public void CloseControl()
+        {
+            // 完全に閉じることは難しいのでVisibilityだけ変える
+            ControlVisibility = Visibility.Collapsed;
+        }
+        /// <summary>
+        /// 閉じるコマンドが実行可能かどうかを判定
+        /// </summary>
+        /// <returns></returns>
+        public bool CanCloseControl()
+        {
+            return !CanExecCommand;
         }
 
         /// <summary>

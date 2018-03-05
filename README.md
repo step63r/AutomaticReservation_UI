@@ -1,6 +1,6 @@
 # AutomaticReservation_UI
-![キャプチャ](./AutomaticReservation_UI.png.png)
-## Overview11
+![キャプチャ](./AutomaticReservation_UI.png)
+## Overview
 ホテルの予約を自動で行うツールです。  
 東横INNに標準対応しています。
 

@@ -1,4 +1,4 @@
-# AutomaticReservation_UI
+# ホテル自動予約ツール
 ![キャプチャ](./AutomaticReservation_UI.png)
 ## Overview
 ホテルの予約を自動で行うツールです。  

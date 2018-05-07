@@ -64,6 +64,10 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_CONFIRM = "//*[@id=\"cnfrm\"]/a/span";
         /// <summary>
+        /// (XPath) 「ご利用規約に同意する」チェック（2018/04/07変更）
+        /// </summary>
+        public static string XPATH_CHKAGREE = "//*[@id=\"mainArea\"]/div[3]/div/ul[4]/li/label/input";
+        /// <summary>
         /// (XPath) 予約確定ボタン
         /// </summary>
         public static string XPATH_OK = "//*[@id=\"entry\"]";

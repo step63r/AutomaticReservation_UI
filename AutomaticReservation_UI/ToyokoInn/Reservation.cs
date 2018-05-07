@@ -257,6 +257,9 @@ namespace AutomaticReservation_UI.ToyokoInn
                             // 確認ボタン押下
                             driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
                             ScreenShot(driver);
+                            // 20180407　規約に同意チェック欄対応
+                            // チェックボックスにチェック
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_CHKAGREE)).Click();
                             // 確定ボタン押下
                             driver.FindElement(By.XPath(SiteConfig.XPATH_OK)).Click();
                             ScreenShot(driver);

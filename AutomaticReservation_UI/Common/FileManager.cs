@@ -19,7 +19,7 @@ namespace AutomaticReservation_UI.Common
         public static void RemoveFileObsolete(string directory, string extension, int saveCount)
         {
             // ファイル名の正規表現
-            var reg = new Regex(String.Format("*.{0}", extension));
+            var reg = new Regex(String.Format(".{0}$", extension));
             // ファイル一覧を作成日付の新しい順に取得
             var files = Directory.GetFiles(directory).Where(f => reg.IsMatch(f)).OrderByDescending(f => File.GetCreationTime(f));
             int count = 0;

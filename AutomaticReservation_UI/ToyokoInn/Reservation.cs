@@ -70,7 +70,7 @@ namespace AutomaticReservation_UI.ToyokoInn
             bool ret = false;
 
             // スクショのファイル数を管理
-            FileManager.RemoveFileObsolete(ScreenShotPath, "png", _scrConfig.MaxFileCount);
+            FileManager.RemoveFileObsolete(_scrConfig.ScrPath, "png", _scrConfig.MaxFileCount);
 
             Message = "ドライバ初期化中";
             using (var driver = WebDriverFactory.CreateInstance(AppSettings.BrowserName.Chrome))

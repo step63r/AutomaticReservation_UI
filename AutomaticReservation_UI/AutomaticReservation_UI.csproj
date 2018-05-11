@@ -122,6 +122,7 @@
     <Compile Include="Common\AsyncCommandBase.cs" />
     <Compile Include="Common\CsvConverter.cs" />
     <Compile Include="Common\DataFormat.cs" />
+    <Compile Include="Common\FileManager.cs" />
     <Compile Include="Common\IAsyncCommand.cs" />
     <Compile Include="Common\IHasDialog.cs" />
     <Compile Include="Common\IProgressBar.cs" />

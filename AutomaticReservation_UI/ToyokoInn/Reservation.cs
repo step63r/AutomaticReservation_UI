@@ -55,7 +55,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         }
 
         // Loggerオブジェクト
-        private ILog log;
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// コンストラクタ
@@ -73,9 +73,6 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <returns></returns>
         public bool Execute()
         {
-            // ログ生成
-            log = LogManager.GetLogger("ReservationProcLog");
-
             log.Debug(String.Format("処理を開始しました"));
             log.Debug(String.Format("> ホテルID　　：{0}", ProcFormat.HotelID.HotelID));
             log.Debug(String.Format("> チェックイン：{0}", ProcFormat.CheckinDate.ToString("yyyy/MM/dd")));

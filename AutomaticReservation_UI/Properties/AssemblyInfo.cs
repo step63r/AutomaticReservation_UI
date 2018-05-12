@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using AutomaticReservation_UI.Common;
+using System;
+using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -51,8 +53,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2018.5.13.1")]
-[assembly: AssemblyFileVersion("2018.5.13.1")]
+[assembly: AssemblyVersion("2018.5.13.2")]
+[assembly: AssemblyFileVersion("2018.5.13.2")]
 
 // log4netを利用するための設定
 [assembly: log4net.Config.XmlConfigurator(ConfigFile=@"Log4net.Config.xml", Watch=true)]

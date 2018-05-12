@@ -27,7 +27,7 @@
       <!-- ログファイルの切替 { サイズ: Size, 日付: Date } -->
       <param name="RollingStyle" value="Date" />
       <!-- ファイル名 -->
-      <param name="File" value="log/Reserve_" />
+      <param name="File" value="${APPDATA}/AutomaticReservation_UI/log/Reserve_" />
       <!-- ファイル名の日付部分 -->
       <param name="DatePattern" value='""yyyyMMdd".log"' />
       <!-- ファイル名の固定 -->

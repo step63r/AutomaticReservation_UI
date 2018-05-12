@@ -53,3 +53,6 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2018.5.7.0")]
 [assembly: AssemblyFileVersion("2018.5.7.0")]
+
+// log4netを利用するための設定
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "../../log4net.config", Watch = true)]

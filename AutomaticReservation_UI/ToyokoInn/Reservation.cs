@@ -81,7 +81,7 @@ namespace AutomaticReservation_UI.ToyokoInn
             // スクショのファイル数を管理
             FileManager.RemoveFileObsolete(_scrConfig.ScrPath, "png", _scrConfig.MaxFileCount);
             // ログのファイル数を管理
-            FileManager.RemoveFileObsolete(@"log\", "log", 100);
+            FileManager.RemoveFileObsolete(String.Format(@"{0}\AutomaticReservation_UI\log", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)), "log", 100);
 
             log.Debug("ドライバ初期化中");
             Message = "ドライバ初期化中";

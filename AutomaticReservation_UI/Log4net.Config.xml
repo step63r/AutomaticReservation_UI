@@ -25,7 +25,7 @@
     <appender name="RollingLogFileAppender"
       type="log4net.Appender.RollingFileAppender">
       <!-- ログファイルの切替 { サイズ: Size, 日付: Date } -->
-      <param name="RollingStyle" value="Date" />
+      <param name="RollingStyle" value="Composite" />
       <!-- ファイル名 -->
       <param name="File" value="${APPDATA}/AutomaticReservation_UI/log/Reserve_" />
       <!-- ファイル名の日付部分 -->

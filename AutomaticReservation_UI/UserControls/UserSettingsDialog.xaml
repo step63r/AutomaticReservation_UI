@@ -84,6 +84,16 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
+                <TextBlock Text="ログ設定"/>
+                <TextBox wpf:HintAssist.Hint="最大ファイル保持数" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
+                    <TextBox.Text>
+                        <Binding Path="CurrentScrConfig.MaxLogCount" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">

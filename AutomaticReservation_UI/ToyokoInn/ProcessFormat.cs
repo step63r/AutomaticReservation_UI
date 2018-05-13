@@ -355,5 +355,25 @@ namespace AutomaticReservation_UI.ToyokoInn
                 PropertyChanged.Raise(() => MaxFileCount);
             }
         }
+
+        [XmlIgnore]
+        private int _maxLogCount;
+        /// <summary>
+        /// 最大ログファイル保持数（超えた場合は古いものから削除される
+        /// </summary>
+        [XmlElement("MaxLogCount")]
+        public int MaxLogCount
+        {
+            get { return _maxLogCount; }
+            set
+            {
+                if (Equals(_maxLogCount, value))
+                {
+                    return;
+                }
+                _maxLogCount = value;
+                PropertyChanged.Raise(() => MaxLogCount);
+            }
+        }
     }
 }

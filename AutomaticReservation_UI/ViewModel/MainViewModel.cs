@@ -89,6 +89,22 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private RelayCommand _cmdWindowClosing;
+        /// <summary>
+        /// WindowClosingイベント
+        /// </summary>
+        public RelayCommand CmdWindowClosing
+        {
+            get
+            {
+                if (_cmdWindowClosing == null)
+                {
+                    _cmdWindowClosing = new RelayCommand(ExecuteWindowClosing, CanExecuteWindowClosing);
+                }
+                return _cmdWindowClosing;
+            }
+        }
+
         #region 検索条件
         private ObservableCollection<PrefCode> _colPrefCode;
         /// <summary>
@@ -123,7 +139,7 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
 
                 // ホテルの表示内容を変更する
-                ColLimitedHotel = new ObservableCollection<Hotel>(ColHotel.Where(item => item.PrefCode.Equals(value.ID)));
+                ColLimitedHotel = value is null ? null : new ObservableCollection<Hotel>(ColHotel.Where(item => item.PrefCode.Equals(value.ID)));
             }
         }
 
@@ -467,15 +483,36 @@ namespace AutomaticReservation_UI.ViewModel
                         return;
                     }
                 });
-            CheckinDate = DateTime.Now.AddDays(1);
-            ChkNoSmoking = true;
-            ChkSmoking = false;
 
             var displayTuple = Load();
             ColPrefCode = displayTuple.Item1;
             ColHotel = displayTuple.Item2;
             ColRoomType = displayTuple.Item3;
             ColCheckinTime = displayTuple.Item4;
+
+            // 検索条件をXMLからロード
+            var selectedSearchSettings = LoadLastSearchSettings();
+            if (selectedSearchSettings is null)
+            {
+                selectedSearchSettings = new ProcessFormat
+                {
+                    HotelID = default(Hotel),
+                    CheckinDate = DateTime.Now.AddDays(1),
+                    Type = default(RoomType),
+                    CheckinValue = default(CheckinTime),
+                    EnableNoSmoking = true,
+                    EnableSmoking = false,
+                    SmokingFirst = false
+                };
+            }
+            SelectedPrefCode = selectedSearchSettings.HotelID is null ? null : ColPrefCode.Where(item => item.ID == selectedSearchSettings.HotelID.PrefCode).First();
+            SelectedHotel = selectedSearchSettings.HotelID is null ? null : ColLimitedHotel.Where(item => item.HotelID == selectedSearchSettings.HotelID.HotelID).First();
+            CheckinDate = selectedSearchSettings.CheckinDate;
+            SelectedRoomType = selectedSearchSettings.Type is null ? null : ColRoomType.Where(item => item.RoomTypeID == selectedSearchSettings.Type.RoomTypeID).First();
+            SelectedCheckinTime = selectedSearchSettings.CheckinValue is null ? null : ColCheckinTime.Where(item => item.CheckinValue == selectedSearchSettings.CheckinValue.CheckinValue).First();
+            ChkNoSmoking = selectedSearchSettings.EnableNoSmoking;
+            ChkSmoking = selectedSearchSettings.EnableSmoking;
+            IsSmokingFirst = selectedSearchSettings.SmokingFirst;
         }
 
         /// <summary>
@@ -653,6 +690,27 @@ namespace AutomaticReservation_UI.ViewModel
             DialogView = null;
         }
 
+        public void ExecuteWindowClosing()
+        {
+            // 検索条件の保存
+            var selectedSearchSettings = new ProcessFormat
+            {
+                HotelID = SelectedHotel,
+                CheckinDate = CheckinDate,
+                Type = SelectedRoomType,
+                CheckinValue = SelectedCheckinTime,
+                EnableNoSmoking = ChkNoSmoking,
+                EnableSmoking = ChkSmoking,
+                SmokingFirst = IsSmokingFirst
+            };
+            XmlConverter.Serialize(selectedSearchSettings, String.Format(@"{0}\LastSearchSettings.xml", SiteConfig.BASE_DIR));
+        }
+
+        public bool CanExecuteWindowClosing()
+        {
+            return true;
+        }
+
         /// <summary>
         /// データをXMLから読み込む
         /// </summary>
@@ -708,6 +766,25 @@ namespace AutomaticReservation_UI.ViewModel
             }
 
             return Tuple.Create(ret1, ret2, ret3, ret4);
+        }
+
+        /// <summary>
+        /// 最後に使用した検索条件をXMLから読み込む
+        /// </summary>
+        private ProcessFormat LoadLastSearchSettings()
+        {
+            var ret = new ProcessFormat();
+            try
+            {
+                // ファイルが存在する
+                ret = XmlConverter.DeSerialize<ProcessFormat>(String.Format(@"{0}\LastSearchSettings.xml", SiteConfig.BASE_DIR));
+            }
+            catch
+            {
+                // ファイルが存在しない
+            }
+
+            return ret;
         }
 
         /// <summary>

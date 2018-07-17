@@ -329,6 +329,23 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        private bool _chkAutoRetry;
+        /// <summary>
+        /// エラー発生時に自動リトライする
+        /// </summary>
+        public bool ChkAutoRetry
+        {
+            get
+            {
+                return _chkAutoRetry;
+            }
+            set
+            {
+                _chkAutoRetry = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Dialog系
@@ -494,6 +511,7 @@ namespace AutomaticReservation_UI.ViewModel
             var selectedSearchSettings = LoadLastSearchSettings();
             if (selectedSearchSettings is null)
             {
+                // デフォルトの設定を定義
                 selectedSearchSettings = new ProcessFormat
                 {
                     HotelID = default(Hotel),
@@ -502,7 +520,8 @@ namespace AutomaticReservation_UI.ViewModel
                     CheckinValue = default(CheckinTime),
                     EnableNoSmoking = true,
                     EnableSmoking = false,
-                    SmokingFirst = false
+                    SmokingFirst = false,
+                    EnableAutoRetry = false
                 };
             }
             SelectedPrefCode = selectedSearchSettings.HotelID is null ? null : ColPrefCode.Where(item => item.ID == selectedSearchSettings.HotelID.PrefCode).First();
@@ -513,6 +532,7 @@ namespace AutomaticReservation_UI.ViewModel
             ChkNoSmoking = selectedSearchSettings.EnableNoSmoking;
             ChkSmoking = selectedSearchSettings.EnableSmoking;
             IsSmokingFirst = selectedSearchSettings.SmokingFirst;
+            ChkAutoRetry = selectedSearchSettings.EnableAutoRetry;
         }
 
         /// <summary>
@@ -534,7 +554,8 @@ namespace AutomaticReservation_UI.ViewModel
                 CheckinValue = SelectedCheckinTime,
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,
-                SmokingFirst = IsSmokingFirst
+                SmokingFirst = IsSmokingFirst,
+                EnableAutoRetry = ChkAutoRetry
             };
             var item = new ReservationControlViewModel(finder);
             ReservationList.Add(item);
@@ -701,7 +722,8 @@ namespace AutomaticReservation_UI.ViewModel
                 CheckinValue = SelectedCheckinTime,
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,
-                SmokingFirst = IsSmokingFirst
+                SmokingFirst = IsSmokingFirst,
+                EnableAutoRetry = ChkAutoRetry
             };
             XmlConverter.Serialize(selectedSearchSettings, String.Format(@"{0}\LastSearchSettings.xml", SiteConfig.BASE_DIR));
         }

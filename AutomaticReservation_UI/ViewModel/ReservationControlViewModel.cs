@@ -57,6 +57,20 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private bool _enableAutoRetry;
+        /// <summary>
+        /// 自動リトライアイコンを表示
+        /// </summary>
+        public bool EnableAutoRetry
+        {
+            get { return _enableAutoRetry; }
+            set
+            {
+                _enableAutoRetry = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ColorZoneMode _colorMode;
         /// <summary>
         /// GroupBoxの色定義
@@ -269,6 +283,8 @@ namespace AutomaticReservation_UI.ViewModel
             // スクリーンショット保存先パス
             _myScrConfig = Load();
             _scrShotPath = GetScrShotFilePath(_myScrConfig.ScrPath);
+            // 自動リトライアイコン
+            EnableAutoRetry = FinderProcessFormat.EnableAutoRetry;
 
             ColorMode = ColorZoneMode.PrimaryLight;
             IconMode = PackIconKind.Play;

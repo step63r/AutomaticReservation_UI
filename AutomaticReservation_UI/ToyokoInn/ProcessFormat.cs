@@ -33,6 +33,9 @@ namespace AutomaticReservation_UI.ToyokoInn
         // チェックイン予定時刻
         [XmlElement("CheckinValue")]
         public CheckinTime CheckinValue { get; set; }
+        // エラー発生時、自動的にリトライする
+        [XmlElement("EnableAutoRetry")]
+        public bool EnableAutoRetry { get; set; }
     }
 
     /// <summary>

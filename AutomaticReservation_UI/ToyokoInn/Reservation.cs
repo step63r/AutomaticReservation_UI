@@ -97,147 +97,124 @@ namespace AutomaticReservation_UI.ToyokoInn
                     log.Debug("==================================================");
                     while (true)
                     {
-                        #region アクセス～詳細ページ
-                        Count += 1;
-                        log.Debug("--------------------------------------------------");
-                        log.Debug(String.Format("継続回数：{0}", Count));
-                        // アクセス
-                        Message = "アクセス中";
-                        log.Debug(String.Format("アクセス中：{0}", SiteConfig.BASE_URL));
-                        driver.Url = SiteConfig.BASE_URL;
-                        ScreenShot(driver);
-
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
-
-                        // 「お気に入りリスト」をクリック
-                        log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FAVORITE));
-                        driver.FindElement(By.XPath(SiteConfig.XPATH_FAVORITE)).Click();
-                        ScreenShot(driver);
-
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
-
-                        log.Debug("ログイン中");
-                        Message = "ログイン中";
-                        // ログイン処理
                         try
                         {
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FORM_ADDRESS));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_PASS));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
-                            // element.Submit()でもいいかも
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_LOGINBTN));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
+                            #region アクセス～詳細ページ
+                            Count += 1;
+                            log.Debug("--------------------------------------------------");
+                            log.Debug(String.Format("継続回数：{0}", Count));
+                            // アクセス
+                            Message = "アクセス中";
+                            log.Debug(String.Format("アクセス中：{0}", SiteConfig.BASE_URL));
+                            driver.Url = SiteConfig.BASE_URL;
                             ScreenShot(driver);
 
-                            // ログイン失敗
-                            if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
+                            if (CheckCancel())
                             {
-                                log.Error("ログインに失敗");
-                                Message = "ログインに失敗";
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
                                 break;
                             }
-                        }
-                        catch (NoSuchElementException)
-                        {
-                            // ログイン済み
-                            log.Debug("ログイン済み");
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error("エラーが発生しました", ex);
-                            Message = ex.Message;
-                            break;
-                        }
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
 
-                        // 詳細ページへ
-                        log.Debug(String.Format("詳細ページへ移動中：{0}", String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID)));
-                        Message = "詳細ページへ移動中";
-                        driver.Url = String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID);
-                        ScreenShot(driver);
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
+                            // 「お気に入りリスト」をクリック
+                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FAVORITE));
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_FAVORITE)).Click();
+                            ScreenShot(driver);
 
-                        // 予約ページへ
-                        log.Debug(String.Format("予約ページへ移動中：{0}", String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString())));
-                        Message = "予約ページへ移動中";
-                        driver.Url = String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString());
-                        ScreenShot(driver);
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
-                        #endregion
-
-                        #region 禁煙・喫煙による分岐
-                        // 20180222　禁煙・喫煙の該当する部屋タイプを全て検索するよう変更
-                        if (!ProcFormat.EnableNoSmoking && !ProcFormat.EnableSmoking)
-                        {
-                            // 禁煙・喫煙両方0だった場合、エラー
-                            // UIで阻止済
-                        }
-                        else if (ProcFormat.EnableNoSmoking && ProcFormat.EnableSmoking)
-                        {
-                            // 禁煙・喫煙両方1だった場合
-                            if (!ProcFormat.SmokingFirst)
+                            if (CheckCancel())
                             {
-                                // 禁煙を優先
-                                ret = SearchRoom(driver, "禁煙");
-                                if (ret)
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+
+                            log.Debug("ログイン中");
+                            Message = "ログイン中";
+                            // ログイン処理
+                            try
+                            {
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FORM_ADDRESS));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_PASS));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
+                                // element.Submit()でもいいかも
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_LOGINBTN));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
+                                ScreenShot(driver);
+
+                                // ログイン失敗
+                                if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
                                 {
-                                    log.Debug("禁煙　空室あり");
-                                    Message = "禁煙　空室あり";
-                                }
-                                else
-                                {
-                                    // print 満室
-                                    ret = SearchRoom(driver, "喫煙");
-                                    if (ret)
-                                    {
-                                        log.Debug("喫煙　空室あり");
-                                        Message = "喫煙　空室あり";
-                                    }
-                                    else
-                                    {
-                                        log.Debug("満室");
-                                        Message = "満室";
-                                    }
+                                    log.Fatal("ログインに失敗");
+                                    log.Info("このエラーは自動リトライできません");
+                                    Message = "ログインに失敗";
+                                    break;
                                 }
                             }
-                            else
+                            catch (NoSuchElementException)
                             {
-                                // 喫煙を優先
-                                ret = SearchRoom(driver, "喫煙");
-                                if (ret)
+                                // ログイン済み
+                                log.Debug("ログイン済み");
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error("エラーが発生しました", ex);
+                                Message = ex.Message;
+                                if (ProcFormat.EnableAutoRetry)
                                 {
-                                    log.Debug("喫煙　空室あり");
-                                    Message = "喫煙　空室あり";
+                                    log.Error("処理を続行します");
+                                    continue;
                                 }
                                 else
                                 {
-                                    // print 満室
+                                    break;
+                                }
+                            }
+                            if (CheckCancel())
+                            {
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+
+                            // 詳細ページへ
+                            log.Debug(String.Format("詳細ページへ移動中：{0}", String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID)));
+                            Message = "詳細ページへ移動中";
+                            driver.Url = String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID);
+                            ScreenShot(driver);
+                            if (CheckCancel())
+                            {
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+
+                            // 予約ページへ
+                            log.Debug(String.Format("予約ページへ移動中：{0}", String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString())));
+                            Message = "予約ページへ移動中";
+                            driver.Url = String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString());
+                            ScreenShot(driver);
+                            if (CheckCancel())
+                            {
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+                            #endregion
+
+                            #region 禁煙・喫煙による分岐
+                            // 20180222　禁煙・喫煙の該当する部屋タイプを全て検索するよう変更
+                            if (!ProcFormat.EnableNoSmoking && !ProcFormat.EnableSmoking)
+                            {
+                                // 禁煙・喫煙両方0だった場合、エラー
+                                // UIで阻止済
+                            }
+                            else if (ProcFormat.EnableNoSmoking && ProcFormat.EnableSmoking)
+                            {
+                                // 禁煙・喫煙両方1だった場合
+                                if (!ProcFormat.SmokingFirst)
+                                {
+                                    // 禁煙を優先
                                     ret = SearchRoom(driver, "禁煙");
                                     if (ret)
                                     {
@@ -246,122 +223,189 @@ namespace AutomaticReservation_UI.ToyokoInn
                                     }
                                     else
                                     {
-                                        log.Debug("満室");
-                                        Message = "満室";
+                                        // print 満室
+                                        ret = SearchRoom(driver, "喫煙");
+                                        if (ret)
+                                        {
+                                            log.Debug("喫煙　空室あり");
+                                            Message = "喫煙　空室あり";
+                                        }
+                                        else
+                                        {
+                                            log.Debug("満室");
+                                            Message = "満室";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // 喫煙を優先
+                                    ret = SearchRoom(driver, "喫煙");
+                                    if (ret)
+                                    {
+                                        log.Debug("喫煙　空室あり");
+                                        Message = "喫煙　空室あり";
+                                    }
+                                    else
+                                    {
+                                        // print 満室
+                                        ret = SearchRoom(driver, "禁煙");
+                                        if (ret)
+                                        {
+                                            log.Debug("禁煙　空室あり");
+                                            Message = "禁煙　空室あり";
+                                        }
+                                        else
+                                        {
+                                            log.Debug("満室");
+                                            Message = "満室";
+                                        }
                                     }
                                 }
                             }
-                        }
-                        else if (ProcFormat.EnableNoSmoking)
-                        {
-                            // 禁煙
-                            ret = SearchRoom(driver, "禁煙");
-                            if (ret)
+                            else if (ProcFormat.EnableNoSmoking)
                             {
-                                log.Debug("禁煙　空室あり");
-                                Message = "禁煙　空室あり";
-                            }
-                            else
-                            {
-                                log.Debug("禁煙　満室");
-                                Message = "禁煙　満室";
-                            }
-                        }
-                        else
-                        {
-                            // 喫煙
-                            ret = SearchRoom(driver, "喫煙");
-                            if (ret)
-                            {
-                                log.Debug("喫煙　空室あり");
-                                Message = "喫煙　空室あり";
-                            }
-                            else
-                            {
-                                log.Debug("喫煙　満室");
-                                Message = "喫煙　満室";
-                            }
-                        }
-                        if (CheckCancel())
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
-                        #endregion
-
-                        #region 空室発見～予約確定
-                        if (ret)
-                        {
-                            log.Debug("予約中");
-                            Message = "予約中";
-                            // 電話番号入力
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_TEL));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(_loginInfo.LoginTel);
-                            // チェックイン予定時刻
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKINTIME));
-                            var chktime_element = driver.FindElement(By.XPath(SiteConfig.XPATH_CHKINTIME));
-                            var chktime_select_element = new SelectElement(chktime_element);
-                            chktime_select_element.SelectByValue(ProcFormat.CheckinValue.CheckinValue);
-                            // 確認ボタン押下
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CONFIRM));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
-                            ScreenShot(driver);
-                            // 20180407　規約に同意チェック欄対応
-                            // チェックボックスにチェック
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKAGREE));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_CHKAGREE)).Click();
-                            // 確定ボタン押下
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OK));
-                            driver.FindElement(By.XPath(SiteConfig.XPATH_OK)).Click();
-                            ScreenShot(driver);
-
-                            // 正しく予約できたことを確認
-                            try
-                            {
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHK_VALIDATE));
-                                string str_chk = driver.FindElement(By.XPath(SiteConfig.XPATH_CHK_VALIDATE)).Text;
-
-                                if (!(str_chk.Equals(SiteConfig.STR_VALIDATE)))
+                                // 禁煙
+                                ret = SearchRoom(driver, "禁煙");
+                                if (ret)
                                 {
-                                    // 要素はあるが文字が違う
-                                    log.Debug("予約できませんでした（文字列が異なります）");
-                                    Message = "予約できませんでした";
-                                    ret = false;
+                                    log.Debug("禁煙　空室あり");
+                                    Message = "禁煙　空室あり";
+                                }
+                                else
+                                {
+                                    log.Debug("禁煙　満室");
+                                    Message = "禁煙　満室";
                                 }
                             }
-                            catch (NoSuchElementException)
+                            else
                             {
-                                // 要素がない
-                                log.Debug("予約できませんでした（要素が存在しません）");
-                                Message = "予約できませんでした";
-                                ret = false;
+                                // 喫煙
+                                ret = SearchRoom(driver, "喫煙");
+                                if (ret)
+                                {
+                                    log.Debug("喫煙　空室あり");
+                                    Message = "喫煙　空室あり";
+                                }
+                                else
+                                {
+                                    log.Debug("喫煙　満室");
+                                    Message = "喫煙　満室";
+                                }
                             }
+                            if (CheckCancel())
+                            {
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+                            #endregion
 
+                            #region 空室発見～予約確定
                             if (ret)
                             {
-                                log.Debug("予約完了");
-                                Message = "予約完了";
+                                log.Debug("予約中");
+                                Message = "予約中";
+                                // 電話番号入力
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_TEL));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(_loginInfo.LoginTel);
+                                // チェックイン予定時刻
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKINTIME));
+                                var chktime_element = driver.FindElement(By.XPath(SiteConfig.XPATH_CHKINTIME));
+                                var chktime_select_element = new SelectElement(chktime_element);
+                                chktime_select_element.SelectByValue(ProcFormat.CheckinValue.CheckinValue);
+                                // 確認ボタン押下
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CONFIRM));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
+                                ScreenShot(driver);
+                                // 20180407　規約に同意チェック欄対応
+                                // チェックボックスにチェック
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKAGREE));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_CHKAGREE)).Click();
+                                // 確定ボタン押下
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OK));
+                                driver.FindElement(By.XPath(SiteConfig.XPATH_OK)).Click();
+                                ScreenShot(driver);
+
+                                // 正しく予約できたことを確認
+                                try
+                                {
+                                    log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHK_VALIDATE));
+                                    string str_chk = driver.FindElement(By.XPath(SiteConfig.XPATH_CHK_VALIDATE)).Text;
+
+                                    if (!(str_chk.Equals(SiteConfig.STR_VALIDATE)))
+                                    {
+                                        // 要素はあるが文字が違う
+                                        log.Debug("予約できませんでした（文字列が異なります）");
+                                        Message = "予約できませんでした";
+                                        ret = false;
+                                        if (ProcFormat.EnableAutoRetry)
+                                        {
+                                            log.Error("処理を続行します");
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                                catch (NoSuchElementException)
+                                {
+                                    // 要素がない
+                                    log.Debug("予約できませんでした（要素が存在しません）");
+                                    Message = "予約できませんでした";
+                                    ret = false;
+                                    if (ProcFormat.EnableAutoRetry)
+                                    {
+                                        log.Error("処理を続行します");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (ret)
+                                {
+                                    log.Debug("予約完了");
+                                    Message = "予約完了";
+                                    break;
+                                }
+                            }
+                            // 指定秒待つ
+                            log.Debug(String.Format("スレッド処理を {0} 秒待機します", SiteConfig.TIME_SLEEP / 1000));
+                            Message = "スレッド待機中...";
+                            // キャンセル可能なスレッド休止にした
+                            if (CancelToken.WaitHandle.WaitOne(SiteConfig.TIME_SLEEP))
+                            {
+                                log.Debug("キャンセルされました");
+                                Message = "キャンセルされました";
+                                break;
+                            }
+                            //Thread.Sleep(SiteConfig.TIME_SLEEP);
+                            //if (CheckCancel())
+                            //{
+                            //Message = "キャンセルされました";
+                            //break;
+                            //}
+                            #endregion
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error("エラーが発生しました", ex);
+                            Message = ex.Message;
+                            if (ProcFormat.EnableAutoRetry)
+                            {
+                                log.Error("処理を続行します");
+                                continue;
+                            }
+                            else
+                            {
                                 break;
                             }
                         }
-                        // 指定秒待つ
-                        log.Debug(String.Format("スレッド処理を {0} 秒待機します", SiteConfig.TIME_SLEEP / 1000));
-                        Message = "スレッド待機中...";
-                        // キャンセル可能なスレッド休止にした
-                        if (CancelToken.WaitHandle.WaitOne(SiteConfig.TIME_SLEEP))
-                        {
-                            log.Debug("キャンセルされました");
-                            Message = "キャンセルされました";
-                            break;
-                        }
-                        //Thread.Sleep(SiteConfig.TIME_SLEEP);
-                        //if (CheckCancel())
-                        //{
-                            //Message = "キャンセルされました";
-                            //break;
-                        //}
-                        #endregion
                     }
                     log.Debug("==================================================");
                     log.Debug("== ▲ 無限ループ処理                            ==");
@@ -369,7 +413,8 @@ namespace AutomaticReservation_UI.ToyokoInn
                 }
                 catch (Exception ex)
                 {
-                    log.Error("エラーが発生しました", ex);
+                    log.Fatal("エラーが発生しました", ex);
+                    log.Info("このエラーは自動リトライできません");
                     Message = ex.Message;
                 }
                 finally

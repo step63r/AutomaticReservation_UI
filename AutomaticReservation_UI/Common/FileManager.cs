@@ -33,7 +33,7 @@ namespace AutomaticReservation_UI.Common
                     {
                         File.Delete(file);
                     }
-                    catch (UnauthorizedAccessException exUsing)
+                    catch
                     {
                         // 使用中のファイルは削除不可
                         // Write log

@@ -30,7 +30,7 @@ namespace AutomaticReservation_UI.Common
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((bool?)value == true) ? Visibility.Hidden : Visibility.Visible;
+            return ((bool?)value == true) ? Visibility.Visible : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -5,26 +5,37 @@ using AutomaticReservation_UI.Common;
 using System.Security;
 
 namespace AutomaticReservation_UI.ToyokoInn
-{
+{    
     /// <summary>
     /// 予約データクラス
     /// </summary>
+    [XmlRoot("ProcessFormat")]
     public class ProcessFormat
     {
         // ホテル
+        [XmlElement("HotelID")]
         public Hotel HotelID { get; set; }
         // 宿泊日
+        [XmlElement("CheckinDate")]
         public DateTime CheckinDate { get; set; }
         // 部屋タイプ
+        [XmlElement("Type")]
         public RoomType Type { get; set; }
         // 禁煙ルームを検索する
+        [XmlElement("EnableNoSmoking")]
         public bool EnableNoSmoking { get; set; }
         // 喫煙ルームを検索する
+        [XmlElement("EnableSmoking")]
         public bool EnableSmoking { get; set; }
         // 喫煙ルームを優先して検索する
+        [XmlElement("SmokingFirst")]
         public bool SmokingFirst { get; set; }
         // チェックイン予定時刻
+        [XmlElement("CheckinValue")]
         public CheckinTime CheckinValue { get; set; }
+        // エラー発生時、自動的にリトライする
+        [XmlElement("EnableAutoRetry")]
+        public bool EnableAutoRetry { get; set; }
     }
 
     /// <summary>

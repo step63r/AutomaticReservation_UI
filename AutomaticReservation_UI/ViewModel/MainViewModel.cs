@@ -206,7 +206,15 @@ namespace AutomaticReservation_UI.ViewModel
             }
             set
             {
-                _checkinDate = value;
+                // XMLに過去日付が登録されていた場合の対策
+                if (value < DateTime.Now)
+                {
+                    _checkinDate = DateTime.Now;
+                }
+                else
+                {
+                    _checkinDate = value;
+                }
                 RaisePropertyChanged();
             }
         }

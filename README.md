@@ -35,7 +35,7 @@
 ## Contact Us
 <dl>
     <dt>サイト</dt>
-    <dd>http://minatopj.php.xdomain.jp/</dd>
+    <dd>https://blog.minatoproject.com/</dd>
     <dt>メール</dt>
     <dd>clannad.ilove.magister at gmail.com</dd>
 </dl>

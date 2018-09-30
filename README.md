@@ -35,13 +35,7 @@
 ## Contact Us
 <dl>
     <dt>サイト</dt>
-    <dd>http://minatopj.php.xdomain.jp/</dd>
+    <dd>https://blog.minatoproject.com/</dd>
     <dt>メール</dt>
     <dd>clannad.ilove.magister at gmail.com</dd>
 </dl>
-
-## History
-| Revision   | Updates         |
-|:----------:|:--------------- |
-| 2018.5.7.0 | サイトの更新に対応 |
-| 2018.3.5.0 | Release         |

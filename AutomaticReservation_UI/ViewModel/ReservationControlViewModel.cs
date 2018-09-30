@@ -290,6 +290,9 @@ namespace AutomaticReservation_UI.ViewModel
             IconMode = PackIconKind.Play;
             ProgressBarVisibility = Visibility.Visible;
             ControlVisibility = Visibility.Visible;
+
+            // 初期化完了時にLoadedイベントを呼び出すように変更
+            Loaded();
         }
 
         private string GetGroupBoxToolTipText()

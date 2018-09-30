@@ -14,11 +14,11 @@
             <common:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding CmdLoaded}"/>
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
     <Grid Margin="10" Width="320" Height="200">
         <GroupBox Header="{Binding Title}" Style="{DynamicResource MaterialDesignCardGroupBox}" materialDesign:ColorZoneAssist.Mode="{Binding ColorMode}" ToolTip="{Binding Path=GroupBoxToolTip}">
             <GroupBox.HeaderTemplate>

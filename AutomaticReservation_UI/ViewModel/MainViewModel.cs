@@ -354,6 +354,23 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        private bool _chkOverwrite;
+        /// <summary>
+        /// 同一日で予約があった場合に上書きする
+        /// </summary>
+        public bool ChkOverwrite
+        {
+            get
+            {
+                return _chkOverwrite;
+            }
+            set
+            {
+                _chkOverwrite = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Dialog系
@@ -529,7 +546,8 @@ namespace AutomaticReservation_UI.ViewModel
                     EnableNoSmoking = true,
                     EnableSmoking = false,
                     SmokingFirst = false,
-                    EnableAutoRetry = false
+                    EnableAutoRetry = false,
+                    EnableOverwrite = false
                 };
             }
             SelectedPrefCode = selectedSearchSettings.HotelID is null ? null : ColPrefCode.Where(item => item.ID == selectedSearchSettings.HotelID.PrefCode).First();
@@ -541,6 +559,7 @@ namespace AutomaticReservation_UI.ViewModel
             ChkSmoking = selectedSearchSettings.EnableSmoking;
             IsSmokingFirst = selectedSearchSettings.SmokingFirst;
             ChkAutoRetry = selectedSearchSettings.EnableAutoRetry;
+            ChkOverwrite = selectedSearchSettings.EnableOverwrite;
         }
 
         /// <summary>
@@ -563,7 +582,8 @@ namespace AutomaticReservation_UI.ViewModel
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,
                 SmokingFirst = IsSmokingFirst,
-                EnableAutoRetry = ChkAutoRetry
+                EnableAutoRetry = ChkAutoRetry,
+                EnableOverwrite = ChkOverwrite
             };
             var item = new ReservationControlViewModel(finder);
             ReservationList.Add(item);
@@ -731,7 +751,8 @@ namespace AutomaticReservation_UI.ViewModel
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,
                 SmokingFirst = IsSmokingFirst,
-                EnableAutoRetry = ChkAutoRetry
+                EnableAutoRetry = ChkAutoRetry,
+                EnableOverwrite = ChkOverwrite
             };
             XmlConverter.Serialize(selectedSearchSettings, String.Format(@"{0}\LastSearchSettings.xml", SiteConfig.BASE_DIR));
         }

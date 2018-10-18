@@ -28,6 +28,7 @@ namespace AutomaticReservation_UI.Common
                     // ブラウザを非表示にする
                     var chromeOptions = new ChromeOptions();
                     chromeOptions.AddArguments(new List<string>() { "headless", "lang=ja" });
+                    //chromeOptions.AddArguments(new List<string>() { "lang=ja" });
                     return new ChromeDriver(chromeDriverService, chromeOptions);
 
                 case AppSettings.BrowserName.Firefox:

@@ -64,6 +64,22 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_CONFIRM = "//*[@id=\"cnfrm\"]/a/span";
         /// <summary>
+        /// 予約済みの場合に表示されるフレームのクラス名
+        /// </summary>
+        public static string IFRAME_OVERWRITE = ".cboxIframe";
+        /// <summary>
+        /// (XPath) 予約済みの場合に表示される要素
+        /// </summary>
+        public static string XPATH_OVERWRITE = "//*[@id=\"mainArea\"]/form/section/p[1]";
+        /// <summary>
+        /// 予約済みの場合に表示される文字列
+        /// </summary>
+        public static string STR_OVERWRITE = "同一日にすでにご予約いただいているホテルがあります。";
+        /// <summary>
+        /// 予約を上書きする場合に押すボタン
+        /// </summary>
+        public static string XPATH_BTN_OVERWRITE = "//*[@id=\"mainArea\"]/form/section/div/ul/li[2]/span/input";
+        /// <summary>
         /// (XPath) 「ご利用規約に同意する」チェック（2018/04/07変更）
         /// </summary>
         public static string XPATH_CHKAGREE = "//*[@id=\"mainArea\"]/div[3]/div/ul[4]/li/label/input";

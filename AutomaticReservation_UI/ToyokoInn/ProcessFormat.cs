@@ -36,6 +36,9 @@ namespace AutomaticReservation_UI.ToyokoInn
         // エラー発生時、自動的にリトライする
         [XmlElement("EnableAutoRetry")]
         public bool EnableAutoRetry { get; set; }
+        // 同一日で予約があった場合に上書きする
+        [XmlElement("EnableOverwrite")]
+        public bool EnableOverwrite { get; set; }
     }
 
     /// <summary>

@@ -318,6 +318,32 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CONFIRM));
                                 driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
                                 ScreenShot(driver);
+
+                                // 同一日で予約があった場合
+                                try
+                                {
+                                    log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OVERWRITE));
+                                    // iframeに操作をスイッチ
+                                    driver.SwitchTo().Frame(driver.FindElement(By.CssSelector(SiteConfig.IFRAME_OVERWRITE)));
+
+                                    if (SiteConfig.STR_OVERWRITE.Equals(driver.FindElement(By.XPath(SiteConfig.XPATH_OVERWRITE)).Text))
+                                    {
+                                        if (ProcFormat.EnableOverwrite)
+                                        {
+                                            driver.FindElement(By.XPath(SiteConfig.XPATH_BTN_OVERWRITE)).Click();
+                                            ScreenShot(driver);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // raise
+                                    }
+                                }
+                                catch (NoSuchElementException)
+                                {
+                                    // 何もしない
+                                }
+
                                 // 20180407　規約に同意チェック欄対応
                                 // チェックボックスにチェック
                                 log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKAGREE));

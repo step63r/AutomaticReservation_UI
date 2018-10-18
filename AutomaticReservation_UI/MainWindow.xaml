@@ -107,6 +107,8 @@
                                 <TextBlock Text="喫煙を優先" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="禁煙・喫煙両方にチェックが入っていた場合に喫煙を優先して検索します"/>
                                 <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Path=ChkAutoRetry}" Margin="0,0,5,0"/>
                                 <TextBlock Text="自動リトライ" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="復帰可能なエラーを検知し自動でリトライを行います"/>
+                                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Path=ChkOverwrite}" Margin="0,0,5,0"/>
+                                <TextBlock Text="上書き" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="既に同一日で予約があった場合に上書きします"/>
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">

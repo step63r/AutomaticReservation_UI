@@ -38,6 +38,7 @@
                         <Binding Path="CurrentLoginInfo.LoginTel" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                <domain:NumericValidationRule ValidatesOnTargetUpdated="True" />
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>

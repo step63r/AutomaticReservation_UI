@@ -35,7 +35,7 @@
     <dt>サイト</dt>
     <dd>https://blog.minatoproject.com/</dd>
     <dt>メール</dt>
-    <dd>clannad.ilove.magister at gmail.com</dd>
+    <dd>uchi63rs at gmail.com</dd>
 </dl>
 
 

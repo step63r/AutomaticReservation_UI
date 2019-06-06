@@ -65,9 +65,6 @@
             </Grid>
             <Grid Grid.Row="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" ToolTip="スクリーンショットを開く" Command="{Binding BtnShowScreenShot}" Margin="0,5,5,10">
-                        <materialDesign:PackIcon Kind="FileImage" Height="24" Width="24"/>
-                    </Button>
                     <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}" ToolTip="処理をキャンセル" Command="{Binding BtnCancel}" Margin="5,5,10,10">
                         <materialDesign:PackIcon Kind="Stop" Height="24" Width="24"/>
                     </Button>

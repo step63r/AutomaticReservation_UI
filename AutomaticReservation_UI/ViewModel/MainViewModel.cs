@@ -441,6 +441,23 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        private string _latestReserveMessage;
+        /// <summary>
+        /// 直近の予約メッセージ
+        /// </summary>
+        public string LatestReserveMessage
+        {
+            get
+            {
+                return _latestReserveMessage;
+            }
+            set
+            {
+                _latestReserveMessage = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Config系
@@ -460,19 +477,19 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-        private ScrConfig _currentScrConfig;
+        private LogConfig _currentLogConfig;
         /// <summary>
-        /// 現在のスクリーンショット設定
+        /// 現在のログ設定
         /// </summary>
-        public ScrConfig CurrentScrConfig
+        public LogConfig CurrentLogConfig
         {
             get
             {
-                return _currentScrConfig;
+                return _currentLogConfig;
             }
             set
             {
-                _currentScrConfig = value;
+                _currentLogConfig = value;
                 RaisePropertyChanged();
             }
         }
@@ -560,6 +577,9 @@ namespace AutomaticReservation_UI.ViewModel
             IsSmokingFirst = selectedSearchSettings.SmokingFirst;
             ChkAutoRetry = selectedSearchSettings.EnableAutoRetry;
             ChkOverwrite = selectedSearchSettings.EnableOverwrite;
+
+            // 予約照会
+            ExecuteCheckLatestReservation();
         }
 
         /// <summary>
@@ -601,7 +621,7 @@ namespace AutomaticReservation_UI.ViewModel
         {
             // データ読み出し
             var configTuple = LoadConfig();
-            CurrentScrConfig = configTuple.Item1;
+            CurrentLogConfig = configTuple.Item1;
             CurrentLoginInfo = configTuple.Item2;
             try
             {
@@ -659,6 +679,34 @@ namespace AutomaticReservation_UI.ViewModel
             return true;
         }
 
+        public async void ExecuteCheckLatestReservation()
+        {
+            LatestReserveMessage = "予約状況を照会しています...";
+
+            // 処理モデル定義
+            var model = new CheckReservation();
+            var checkResult = default(CheckReservationResult);
+            await Task.Run(() =>
+            {
+                // 処理実行
+                checkResult = model.Execute();
+            });
+
+            // 処理結果取得
+            switch (checkResult)
+            {
+                case CheckReservationResult.Found:
+                    LatestReserveMessage = String.Format("直近の予約は {0} に {1} です", model._reservationItem.Date, model._reservationItem.Name);
+                    break;
+                case CheckReservationResult.NotFound:
+                    LatestReserveMessage = "予約はありません";
+                    break;
+                case CheckReservationResult.LoginFailed:
+                    LatestReserveMessage = "ログインに失敗しました";
+                    break;
+            }
+        }
+
         public async void AcceptDialog()
         {
             // ダイアログ種別で分岐
@@ -666,7 +714,7 @@ namespace AutomaticReservation_UI.ViewModel
             {
                 case DialogType.Configure:
                     // 設定を保存
-                    XmlConverter.Serialize(CurrentScrConfig, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                    XmlConverter.Serialize(CurrentLogConfig, String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
                     CurrentLoginInfo.LoginPass = AesEncrypt.EncryptToBase64(SecureStringConverter.SecureToPlain(CurrentAesPass), AesKeyConf.key, AesKeyConf.iv);
                     XmlConverter.Serialize(CurrentLoginInfo, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
 
@@ -842,13 +890,14 @@ namespace AutomaticReservation_UI.ViewModel
         /// 設定データをXMLから読み込む
         /// </summary>
         /// <returns></returns>
-        private Tuple<ScrConfig, LoginInfo> LoadConfig()
+        private Tuple<LogConfig, LoginInfo> LoadConfig()
         {
-            var ret1 = new ScrConfig();
+            var ret1 = new LogConfig();
             try
             {
                 // ファイルが存在する
-                ret1 = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                ret1 = XmlConverter.DeSerialize<LogConfig>(String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
+                ret1 = ret1 ?? new LogConfig() { MaxLogCount = 100 };
             }
             catch
             {

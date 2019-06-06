@@ -115,22 +115,6 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
-        private RelayCommand _btnShowScreenShot;
-        /// <summary>
-        /// スクリーンショット表示ボタン
-        /// </summary>
-        public RelayCommand BtnShowScreenShot
-        {
-            get
-            {
-                if (_btnShowScreenShot == null)
-                {
-                    _btnShowScreenShot = new RelayCommand(ShowScreenShot, CanShowScreenShot);
-                }
-                return _btnShowScreenShot;
-            }
-        }
-
         private RelayCommand _btnCancel;
         /// <summary>
         /// キャンセルボタン
@@ -262,11 +246,6 @@ namespace AutomaticReservation_UI.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        // スクリーンショット設定
-        private ScrConfig _myScrConfig;
-        // Modelに渡すスクリーンショット保存パス
-        private string _scrShotPath;
         #endregion
 
         /// <summary>
@@ -280,9 +259,6 @@ namespace AutomaticReservation_UI.ViewModel
             Title = String.Format("{0} {1}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName);
             // ツールチップ
             GroupBoxToolTip = GetGroupBoxToolTipText();
-            // スクリーンショット保存先パス
-            _myScrConfig = Load();
-            _scrShotPath = GetScrShotFilePath(_myScrConfig.ScrPath);
             // 自動リトライアイコン
             EnableAutoRetry = FinderProcessFormat.EnableAutoRetry;
 
@@ -319,7 +295,21 @@ namespace AutomaticReservation_UI.ViewModel
                 strSmoke = "喫煙";
             }
 
-            return String.Format("{0} {1} {2} {3} {4}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName, FinderProcessFormat.Type.RoomTypeName, FinderProcessFormat.CheckinValue.CheckinName, strSmoke);
+            string strAutoRetry = "";
+            // 自動リトライ
+            if (FinderProcessFormat.EnableAutoRetry)
+            {
+                strAutoRetry = " 自動リトライ";
+            }
+
+            string strOverwrite = "";
+            // 上書き
+            if (FinderProcessFormat.EnableOverwrite)
+            {
+                strOverwrite = " 上書き";
+            }
+
+            return String.Format("{0} {1} {2} {3} {4}{5}{6}", FinderProcessFormat.CheckinDate.ToShortDateString(), FinderProcessFormat.HotelID.HotelName, FinderProcessFormat.Type.RoomTypeName, FinderProcessFormat.CheckinValue.CheckinName, strSmoke, strAutoRetry, strOverwrite);
         }
 
         public void Loaded()
@@ -336,7 +326,6 @@ namespace AutomaticReservation_UI.ViewModel
                     // オブジェクトを渡して
                     ProcFormat = FinderProcessFormat,
                     CancelToken = CancelToken,
-                    ScreenShotPath = _scrShotPath
                 };
                 try
                 {
@@ -376,29 +365,6 @@ namespace AutomaticReservation_UI.ViewModel
         }
 
         /// <summary>
-        /// スクリーンショット表示コマンドを実行
-        /// </summary>
-        public void ShowScreenShot()
-        {
-            try
-            {
-                Process.Start(_scrShotPath);
-            }
-            catch
-            {
-                // 特に何もしない
-            }
-        }
-        /// <summary>
-        /// スクリーンショット表示コマンドが実行可能かどうかを判定
-        /// </summary>
-        /// <returns></returns>
-        public bool CanShowScreenShot()
-        {
-            return CanExecCommand;
-        }
-
-        /// <summary>
         /// キャンセルコマンドを実行
         /// </summary>
         public void Cancel()
@@ -433,17 +399,6 @@ namespace AutomaticReservation_UI.ViewModel
         }
 
         /// <summary>
-        /// スクリーンショットのファイルパスを取得する
-        /// </summary>
-        /// <param name="dirPath">基底ディレクトリ</param>
-        /// <returns></returns>
-        private string GetScrShotFilePath(string dirPath)
-        {
-            // dirPath\現在日時_チェックイン日付_HotelID.png
-            return String.Format(@"{0}\{1}_{2}_{3}.png", dirPath, DateTime.Now.ToString("yyyyMMddHHmmss"), FinderProcessFormat.CheckinDate.ToString("yyyyMMdd"), FinderProcessFormat.HotelID.HotelID);
-        }
-
-        /// <summary>
         /// プログレスバーの通知ハンドラ
         /// </summary>
         /// <param name="sender"></param>
@@ -466,18 +421,18 @@ namespace AutomaticReservation_UI.ViewModel
         /// データをXMLから読み込む
         /// </summary>
         /// <returns></returns>
-        private ScrConfig Load()
+        private LogConfig Load()
         {
-            var ret = new ScrConfig();
+            var ret = new LogConfig();
             try
             {
                 // ファイルが存在する
-                ret = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                ret = XmlConverter.DeSerialize<LogConfig>(String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
             }
             catch
             {
                 // ファイルが存在しない
-                XmlConverter.Serialize(ret, String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                XmlConverter.Serialize(ret, String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
             }
 
             return ret;

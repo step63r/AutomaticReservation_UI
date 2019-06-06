@@ -119,18 +119,31 @@
             </Grid>
             <Grid Grid.Row="2">
                 <ScrollViewer x:Name="ParentScrollViewer" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
-                    <ItemsControl ItemsSource="{Binding ReservationList}" HorizontalAlignment="Center">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type vm:ReservationControlViewModel}">
-                                <ctrl:ReservationControl/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <ItemsControl ItemsSource="{Binding ReservationList}" HorizontalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:ReservationControlViewModel}">
+                                        <ctrl:ReservationControl/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <TextBlock Text="{Binding LatestReserveMessage}" HorizontalAlignment="Right" Margin="0, 0, 5, 5"/>
+                        </Grid>
+                    </Grid>
                 </ScrollViewer>
             </Grid>
         </Grid>

@@ -282,93 +282,13 @@ namespace AutomaticReservation_UI.ToyokoInn
     }
 
     /// <summary>
-    /// スクリーンショット設定クラス
+    /// ログファイル設定クラス
     /// </summary>
-    [XmlRoot("ScrConfig")]
-    public class ScrConfig : INotifyPropertyChanged
+    [XmlRoot("LogConfig")]
+    public class LogConfig : INotifyPropertyChanged
     {
         // イベントだけ実装しておく。OnPropertyChangedは使わない
         public event PropertyChangedEventHandler PropertyChanged;
-
-        [XmlIgnore]
-        private string _scrPath;
-        /// <summary>
-        /// 保存ディレクトリ
-        /// </summary>
-        [XmlElement("ScrPath")]
-        public string ScrPath
-        {
-            get { return _scrPath; }
-            set
-            {
-                if (Equals(_scrPath, value))
-                {
-                    return;
-                }
-                _scrPath = value;
-                PropertyChanged.Raise(() => ScrPath);
-            }
-        }
-
-        [XmlIgnore]
-        private int _scrWidth;
-        /// <summary>
-        /// 画面サイズ 横（px）
-        /// </summary>
-        [XmlElement("ScrWidth")]
-        public int ScrWidth
-        {
-            get { return _scrWidth; }
-            set
-            {
-                if (Equals(_scrWidth, value))
-                {
-                    return;
-                }
-                _scrWidth = value;
-                PropertyChanged.Raise(() => ScrWidth);
-            }
-        }
-
-        [XmlIgnore]
-        private int _scrHeight;
-        /// <summary>
-        /// 画面サイズ 縦（px）
-        /// </summary>
-        [XmlElement("ScrHeight")]
-        public int ScrHeight
-        {
-            get { return _scrHeight; }
-            set
-            {
-                if (Equals(_scrHeight, value))
-                {
-                    return;
-                }
-                _scrHeight = value;
-                PropertyChanged.Raise(() => ScrHeight);
-            }
-        }
-
-        [XmlIgnore]
-        private int _maxFileCount;
-        /// <summary>
-        /// 最大ファイル保持数（超えた場合は古いものから削除される）
-        /// </summary>
-        [XmlElement("MaxFileCount")]
-        public int MaxFileCount
-        {
-            get { return _maxFileCount; }
-            set
-            {
-                if (Equals(_maxFileCount, value))
-                {
-                    return;
-                }
-                _maxFileCount = value;
-                PropertyChanged.Raise(() => MaxFileCount);
-            }
-        }
 
         [XmlIgnore]
         private int _maxLogCount;

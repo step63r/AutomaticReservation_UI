@@ -25,6 +25,31 @@ namespace AutomaticReservation_UI.Common
     }
 
     /// <summary>
+    /// 最新予約取得結果
+    /// </summary>
+    public enum CheckReservationResult
+    {
+        Found,
+        NotFound,
+        LoginFailed
+    }
+
+    /// <summary>
+    /// 予約アイテムクラス
+    /// </summary>
+    public class ReservationItem
+    {
+        /// <summary>
+        /// 名前
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 日時
+        /// </summary>
+        public string Date { get; set; }
+    }
+
+    /// <summary>
     /// 都道府県コードクラス
     /// </summary>
     public class PrefCode

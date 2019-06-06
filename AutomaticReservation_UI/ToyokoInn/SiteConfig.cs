@@ -12,10 +12,6 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string BASE_DIR = String.Format(@"{0}\AutomaticReservation_UI\ToyokoInn", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         /// <summary>
-        /// (XPath) お気に入りリスト
-        /// </summary>
-        public static string XPATH_FAVORITE = "//*[@id=\"header\"]/div[2]/div[2]/ul[2]/li[3]/a/span";
-        /// <summary>
         /// (XPath) メールアドレスフォーム
         /// </summary>
         public static string XPATH_FORM_ADDRESS = "//*[@id=\"mainArea\"]/form/div/div[1]/div/div/ul[1]/li[1]/label/input";
@@ -102,8 +98,20 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string STR_VALIDATE = "ご予約ありがとうございました。";
         /// <summary>
-        /// ループごとのスリープ時間（ミリ秒）
+        /// ループごとの最短スリープ時間（ミリ秒）
         /// </summary>
-        public static int TIME_SLEEP = 30000;
+        public static int MIN_THREAD_SLEEP_MILLISEC = 30000;
+        /// <summary>
+        /// ループごとの最長スリープ時間（ミリ秒）
+        /// </summary>
+        public static int MAX_THREAD_SLEEP_MILLISEC = 60000;
+        /// <summary>
+        /// (XPATH) 予約一覧のホテル名
+        /// </summary>
+        public static string XPATH_RESERVATION_NAME = "//*[@id=\"mainArea\"]/div[2]/div/section/section[1]/form/div[2]/div[1]/p/a";
+        /// <summary>
+        /// (XPATH) 予約一覧のチェックイン日時
+        /// </summary>
+        public static string XPATH_RESERVATION_DATE = "//*[@id=\"mainArea\"]/div[2]/div/section/section[1]/form/div[3]/div[1]/div/table/tbody/tr[1]/td";
     }
 }

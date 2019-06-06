@@ -43,52 +43,10 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <TextBlock Text="スクリーンショット設定"/>
-                <TextBox wpf:HintAssist.Hint="保存先" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
-                    <TextBox.Text>
-                        <Binding Path="CurrentScrConfig.ScrPath" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox wpf:HintAssist.Hint="幅" Width="50" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
-                        <TextBox.Text>
-                            <Binding Path="CurrentScrConfig.ScrWidth" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <TextBlock Text="px" VerticalAlignment="Bottom" Margin="5"/>
-                    <TextBlock Text="✕" VerticalAlignment="Bottom" Margin="5"/>
-                    <TextBox wpf:HintAssist.Hint="縦" Width="50" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
-                        <TextBox.Text>
-                            <Binding Path="CurrentScrConfig.ScrHeight" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <TextBlock Text="px" VerticalAlignment="Bottom" Margin="5"/>
-                </StackPanel>
-                <TextBox wpf:HintAssist.Hint="最大ファイル保持数" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
-                    <TextBox.Text>
-                        <Binding Path="CurrentScrConfig.MaxFileCount" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
                 <TextBlock Text="ログ設定"/>
                 <TextBox wpf:HintAssist.Hint="最大ファイル保持数" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20">
                     <TextBox.Text>
-                        <Binding Path="CurrentScrConfig.MaxLogCount" UpdateSourceTrigger="PropertyChanged">
+                        <Binding Path="CurrentLogConfig.MaxLogCount" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
                             </Binding.ValidationRules>

@@ -23,12 +23,8 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// キャンセルトークン
         /// </summary>
         public CancellationToken CancelToken;
-        /// <summary>
-        /// スクリーンショット保存先パス
-        /// </summary>
-        public string ScreenShotPath;
-        // スクリーンショット設定
-        public ScrConfig _scrConfig;
+        // ログファイル設定
+        public LogConfig _logConfig;
         // ログイン情報
         protected LoginInfo _loginInfo;
 
@@ -63,7 +59,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         public Reservation()
         {
             var configTuple = Load();
-            _scrConfig = configTuple.Item1;
+            _logConfig = configTuple.Item1;
             _loginInfo = configTuple.Item2;
         }
 
@@ -78,72 +74,22 @@ namespace AutomaticReservation_UI.ToyokoInn
             log.Debug(String.Format("> ホテルID　　：{0}", ProcFormat.HotelID.HotelID));
             log.Debug(String.Format("> チェックイン：{0}", ProcFormat.CheckinDate.ToString("yyyy/MM/dd")));
 
-            // スクショのファイル数を管理
-            FileManager.RemoveFileObsolete(_scrConfig.ScrPath, "png", _scrConfig.MaxFileCount);
             // ログのファイル数を管理
-            FileManager.RemoveFileObsolete(String.Format(@"{0}\AutomaticReservation_UI\log", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)), "log", _scrConfig.MaxLogCount);
+            FileManager.RemoveFileObsolete(String.Format(@"{0}\AutomaticReservation_UI\log", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)), "log", _logConfig.MaxLogCount);
 
             log.Debug("ドライバ初期化中");
             Message = "ドライバ初期化中";
             using (var driver = WebDriverFactory.CreateInstance(AppSettings.BrowserName.Chrome))
             {
                 // 仮想画面サイズ設定
-                driver.Manage().Window.Size = new System.Drawing.Size(_scrConfig.ScrWidth, _scrConfig.ScrHeight);
+                driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
                 #region 初期処理
                 // アクセス
                 Message = "アクセス中";
                 log.Debug(String.Format("アクセス中：{0}", SiteConfig.BASE_URL));
                 driver.Url = SiteConfig.BASE_URL;
-                ScreenShot(driver);
 
-                if (CheckCancel())
-                {
-                    log.Debug("キャンセルされました");
-                    Message = "キャンセルされました";
-                    return ret;
-                }
-
-                // 「お気に入りリスト」をクリック
-                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FAVORITE));
-                driver.FindElement(By.XPath(SiteConfig.XPATH_FAVORITE)).Click();
-                ScreenShot(driver);
-
-                if (CheckCancel())
-                {
-                    log.Debug("キャンセルされました");
-                    Message = "キャンセルされました";
-                    return ret;
-                }
-
-                log.Debug("ログイン中");
-                Message = "ログイン中";
-                // ログイン処理
-                try
-                {
-                    log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FORM_ADDRESS));
-                    driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
-                    log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_PASS));
-                    driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
-                    // element.Submit()でもいいかも
-                    log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_LOGINBTN));
-                    driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
-                    ScreenShot(driver);
-
-                    // ログイン失敗
-                    if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
-                    {
-                        log.Fatal("ログインに失敗");
-                        log.Info("このエラーは自動リトライできません");
-                        Message = "ログインに失敗";
-                        return ret;
-                    }
-                }
-                catch (NoSuchElementException)
-                {
-                    // ログイン済み
-                    log.Debug("ログイン済み");
-                }
                 if (CheckCancel())
                 {
                     log.Debug("キャンセルされました");
@@ -155,7 +101,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                 log.Debug(String.Format("詳細ページへ移動中：{0}", String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID)));
                 Message = "詳細ページへ移動中";
                 driver.Url = String.Format("{0}search/detail//{1}", SiteConfig.BASE_URL, ProcFormat.HotelID.HotelID);
-                ScreenShot(driver);
                 if (CheckCancel())
                 {
                     log.Debug("キャンセルされました");
@@ -177,7 +122,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                         log.Debug(String.Format("予約ページへ移動中：{0}", String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString())));
                         Message = "予約ページへ移動中";
                         driver.Url = String.Format("{0}search/reserve/room?chckn_date={1}&room_type={2}", SiteConfig.BASE_URL, ProcFormat.CheckinDate.ToShortDateString(), ProcFormat.Type.RoomTypeID.ToString());
-                        ScreenShot(driver);
                         if (CheckCancel())
                         {
                             log.Debug("キャンセルされました");
@@ -284,6 +228,15 @@ namespace AutomaticReservation_UI.ToyokoInn
                         }
                         #endregion
 
+                        // ログイン試行
+                        if (!TryLogin(driver))
+                        {
+                            log.Fatal("ログインに失敗");
+                            log.Info("このエラーは自動リトライできません");
+                            Message = "ログインに失敗";
+                            return ret;
+                        }
+
                         #region 空室発見～予約確定
                         if (ret)
                         {
@@ -300,7 +253,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                             // 確認ボタン押下
                             log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CONFIRM));
                             driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
-                            ScreenShot(driver);
 
                             // 同一日で予約があった場合
                             try
@@ -314,7 +266,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                                     if (ProcFormat.EnableOverwrite)
                                     {
                                         driver.FindElement(By.XPath(SiteConfig.XPATH_BTN_OVERWRITE)).Click();
-                                        ScreenShot(driver);
                                     }
                                 }
                                 else
@@ -327,7 +278,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 // 何もしない
                             }
 
-
                             // 予約＆正常終了確認
                             try
                             {
@@ -339,7 +289,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 // 確定ボタン押下
                                 log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OK));
                                 driver.FindElement(By.XPath(SiteConfig.XPATH_OK)).Click();
-                                ScreenShot(driver);
 
                                 log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHK_VALIDATE));
                                 string str_chk = driver.FindElement(By.XPath(SiteConfig.XPATH_CHK_VALIDATE)).Text;
@@ -398,11 +347,12 @@ namespace AutomaticReservation_UI.ToyokoInn
                         }
                     }
 
-                    // 指定秒待つ
-                    log.Debug(String.Format("スレッド処理を {0} 秒待機します", SiteConfig.TIME_SLEEP / 1000));
+                    // 適当な秒数待つ
+                    int threadSleep = new Random().Next(SiteConfig.MIN_THREAD_SLEEP_MILLISEC, SiteConfig.MAX_THREAD_SLEEP_MILLISEC);
+                    log.Debug(String.Format("スレッド処理を {0} 秒待機します", threadSleep / 1000));
                     Message = "スレッド待機中...";
                     // キャンセル可能なスレッド休止にした
-                    if (CancelToken.WaitHandle.WaitOne(SiteConfig.TIME_SLEEP))
+                    if (CancelToken.WaitHandle.WaitOne(threadSleep))
                     {
                         log.Debug("キャンセルされました");
                         Message = "キャンセルされました";
@@ -412,6 +362,43 @@ namespace AutomaticReservation_UI.ToyokoInn
                 #endregion
             }
             log.Debug(String.Format("処理を終了しました（戻り値：{0}）", ret));
+            return ret;
+        }
+
+        /// <summary>
+        /// ログインを試みる
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        private bool TryLogin(IWebDriver driver)
+        {
+            bool ret = false;
+            log.Debug("ログイン中");
+            Message = "ログイン中";
+            try
+            {
+                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_FORM_ADDRESS));
+                driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
+                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_PASS));
+                driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
+                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_LOGINBTN));
+                driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
+
+                // ログイン失敗
+                if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
+                {
+                    // ret = false;
+                }
+                else
+                {
+                    ret = true;
+                }
+            }
+            catch (NoSuchElementException)
+            {
+                // ログイン不要
+                ret = true;
+            }
             return ret;
         }
 
@@ -430,25 +417,17 @@ namespace AutomaticReservation_UI.ToyokoInn
         }
 
         /// <summary>
-        /// スクリーンショットを保存する
-        /// </summary>
-        private void ScreenShot(IWebDriver driver)
-        {
-            var ss = ((ITakesScreenshot)driver).GetScreenshot();
-            ss.SaveAsFile(ScreenShotPath, ScreenshotImageFormat.Png);
-        }
-
-        /// <summary>
         /// データをXMLから読み込む
         /// </summary>
         /// <returns></returns>
-        private Tuple<ScrConfig, LoginInfo> Load()
+        private Tuple<LogConfig, LoginInfo> Load()
         {
-            var ret1 = new ScrConfig();
+            var ret1 = new LogConfig();
             try
             {
                 // ファイルが存在する
-                ret1 = XmlConverter.DeSerialize<ScrConfig>(String.Format(@"{0}\ScrConfig.xml", SiteConfig.BASE_DIR));
+                ret1 = XmlConverter.DeSerialize<LogConfig>(String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
+                ret1 = ret1 ?? new LogConfig() { MaxLogCount = 100 };
             }
             catch
             {
@@ -494,7 +473,6 @@ namespace AutomaticReservation_UI.ToyokoInn
                         try
                         {
                             driver.FindElement(By.XPath(SiteConfig.XPATH_RESERVEBTN.Replace("INTEGER", i.ToString()))).Click();
-                            ScreenShot(driver);
                             // 予約ボタンが押下可能な状態だったらループを抜ける
                             ret = true;
                             break;

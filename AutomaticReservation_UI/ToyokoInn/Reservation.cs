@@ -257,10 +257,12 @@ namespace AutomaticReservation_UI.ToyokoInn
                             // 同一日で予約があった場合
                             try
                             {
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OVERWRITE));
-                                // iframeに操作をスイッチ
-                                driver.SwitchTo().Frame(driver.FindElement(By.CssSelector(SiteConfig.IFRAME_OVERWRITE)));
+                                // Waitオブジェクトを定義
+                                var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 3));
 
+                                // iframeに操作をスイッチ
+                                wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(By.CssSelector(SiteConfig.IFRAME_OVERWRITE)));
+                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OVERWRITE));
                                 if (SiteConfig.STR_OVERWRITE.Equals(driver.FindElement(By.XPath(SiteConfig.XPATH_OVERWRITE)).Text))
                                 {
                                     if (ProcFormat.EnableOverwrite)
@@ -277,20 +279,26 @@ namespace AutomaticReservation_UI.ToyokoInn
                             {
                                 // 何もしない
                             }
+                            catch (WebDriverTimeoutException)
+                            {
+                                // 何もしない
+                            }
 
                             // 予約＆正常終了確認
                             try
                             {
+                                
+
                                 // 20180407　規約に同意チェック欄対応
                                 // チェックボックスにチェック
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKAGREE));
+                                log.Debug(string.Format("処理中：{0}", SiteConfig.XPATH_CHKAGREE));
                                 driver.FindElement(By.XPath(SiteConfig.XPATH_CHKAGREE)).Click();
 
                                 // 確定ボタン押下
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OK));
+                                log.Debug(string.Format("処理中：{0}", SiteConfig.XPATH_OK));
                                 driver.FindElement(By.XPath(SiteConfig.XPATH_OK)).Click();
 
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHK_VALIDATE));
+                                log.Debug(string.Format("処理中：{0}", SiteConfig.XPATH_CHK_VALIDATE));
                                 string str_chk = driver.FindElement(By.XPath(SiteConfig.XPATH_CHK_VALIDATE)).Text;
 
                                 if (!(str_chk.Equals(SiteConfig.STR_VALIDATE)))

@@ -81,24 +81,35 @@ namespace AutomaticReservation_UI.ToyokoInn
             bool ret = false;
             try
             {
-                driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
-                driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
-                driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
-
-                // ログイン失敗
-                if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
+                if (_loginInfo is null)
                 {
-                    // ret = false;
+
                 }
                 else
                 {
-                    ret = true;
+                    driver.FindElement(By.XPath(SiteConfig.XPATH_FORM_ADDRESS)).SendKeys(_loginInfo.LoginAddress);
+                    driver.FindElement(By.XPath(SiteConfig.XPATH_PASS)).SendKeys(AesEncrypt.DecryptFromBase64(_loginInfo.LoginPass, AesKeyConf.key, AesKeyConf.iv));
+                    driver.FindElement(By.XPath(SiteConfig.XPATH_LOGINBTN)).Click();
+
+                    // ログイン失敗
+                    if (driver.Url.Equals(String.Format("{0}login", SiteConfig.BASE_URL)))
+                    {
+                        // ret = false;
+                    }
+                    else
+                    {
+                        ret = true;
+                    }
                 }
             }
             catch (NoSuchElementException)
             {
                 // ログイン不要
                 ret = true;
+            }
+            catch (FormatException)
+            {
+                ret = false;
             }
             return ret;
         }

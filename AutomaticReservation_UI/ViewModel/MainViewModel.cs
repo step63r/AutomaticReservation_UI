@@ -715,6 +715,10 @@ namespace AutomaticReservation_UI.ViewModel
                 case DialogType.Configure:
                     // 設定を保存
                     XmlConverter.Serialize(CurrentLogConfig, String.Format(@"{0}\LogConfig.xml", SiteConfig.BASE_DIR));
+                    if (CurrentLoginInfo is null)
+                    {
+                        CurrentLoginInfo = new LoginInfo();
+                    }
                     CurrentLoginInfo.LoginPass = AesEncrypt.EncryptToBase64(SecureStringConverter.SecureToPlain(CurrentAesPass), AesKeyConf.key, AesKeyConf.iv);
                     XmlConverter.Serialize(CurrentLoginInfo, String.Format(@"{0}\LoginInfo.xml", SiteConfig.BASE_DIR));
 

@@ -109,7 +109,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                             // 住所の先頭文字列を読んで都道府県を特定する
                             foreach(string one_pref in pref_names)
                             {
-                                if (hotel_address.StartsWith(one_pref))
+                                if (hotel_address.Remove(0, 10).StartsWith(one_pref))
                                 {
                                     try
                                     {

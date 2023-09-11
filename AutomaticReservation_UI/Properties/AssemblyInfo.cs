@@ -14,7 +14,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("AutomaticReservation_UI")]
 [assembly: AssemblyCompany("minato project")]
-[assembly: AssemblyCopyright("Copyright © minato 2018")]
+[assembly: AssemblyCopyright("Copyright © minato 2018-2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -53,8 +53,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2020.2.14.0")]
-[assembly: AssemblyFileVersion("2020.2.14.0")]
+[assembly: AssemblyVersion("2023.9.12.0")]
+[assembly: AssemblyFileVersion("2023.9.12.0")]
 
 // log4netを利用するための設定
 [assembly: log4net.Config.XmlConfigurator(ConfigFile= @"Log4net.Config.xml", Watch=true)]

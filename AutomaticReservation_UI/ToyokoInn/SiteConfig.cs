@@ -26,13 +26,11 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// (XPath) 予約ボタン（INTEGER -> 任意の数字）
         /// </summary>
-        // 2019/02/03  サイト変更対応
-        public static string XPATH_RESERVEBTN = "//*[@id=\"mainArea\"]/section[1]/div[INTEGER]/div/div[1]/div[3]/ul/li/a/span";
-        //public static string XPATH_RESERVEBTN = "//*[@id=\"mainArea\"]/section[1]/div[INTEGER]/div/div[2]/div[3]/ul/li/a/span";
+        public static string XPATH_RESERVEBTN = "//*[@id=\"section_std\"]/div[INTEGER]/div/div[2]/div[3]/ul/li/a/span";
         /// <summary>
         /// (XPath) 禁煙か喫煙かを判断する要素（INTEGER -> 任意の数字）
         /// </summary>
-        public static string XPATH_SMOKELABEL = "//*[@id=\"mainArea\"]/section[1]/h2[INTEGER]/em/span";
+        public static string XPATH_SMOKELABEL = "//*[@id=\"section_std\"]/h2[INTEGER]/em/span";
         /// <summary>
         /// (XPath) ホテル一覧ページの都道府県名（ITER_REGION, ITER_PREF -> 任意の数字）
         /// </summary>
@@ -52,11 +50,11 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// (XPath) 連絡先電話番号
         /// </summary>
-        public static string XPATH_TEL = "//*[@id=\"mainArea\"]/section[2]/div/div[2]/div/div[1]/table/tbody/tr[7]/td/span/input";
+        public static string XPATH_TEL = "//*[@id=\"mainArea\"]/section[2]/div/div[3]/div/div[1]/table/tbody/tr[8]/td/span/input";
         /// <summary>
         /// (XPath) チェックイン予定時刻
         /// </summary>
-        public static string XPATH_CHKINTIME = "//*[@id=\"mainArea\"]/section[2]/div/div[2]/div/div[1]/table/tbody/tr[8]/td/div[1]/select";
+        public static string XPATH_CHKINTIME = "//*[@id=\"mainArea\"]/section[2]/div/div[3]/div/div[1]/table/tbody/tr[9]/td/div[1]/select";
         /// <summary>
         /// (XPath) 確認ボタン
         /// </summary>
@@ -80,7 +78,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// (XPath) 「ご利用規約に同意する」チェック（2018/04/07変更）
         /// </summary>
-        public static string XPATH_CHKAGREE = "//*[@id=\"mainArea\"]/div[3]/div/ul[4]/li/label/input";
+        public static string XPATH_CHKAGREE = "//*[@id=\"mainArea\"]/div[3]/div/div/label/div[1]/input";
         /// <summary>
         /// (XPath) 予約確定ボタン
         /// </summary>
@@ -88,7 +86,7 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// (XPath) 予約が正常に終了したことを確認する要素
         /// </summary>
-        public static string XPATH_CHK_VALIDATE = "/html/body/main/div/div/div[2]/p";
+        public static string XPATH_CHK_VALIDATE = "//*[@id=\"mainArea\"]/div[2]/p";
         /// <summary>
         /// 基底URL
         /// </summary>
@@ -108,10 +106,10 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// <summary>
         /// (XPATH) 予約一覧のホテル名
         /// </summary>
-        public static string XPATH_RESERVATION_NAME = "//*[@id=\"mainArea\"]/div[2]/div/section/section[1]/form/div[2]/div[1]/p/a";
+        public static string XPATH_RESERVATION_NAME = "//*[@id=\"mainArea\"]/div[2]/div/section/section/form/div[2]/div[1]/p/a";
         /// <summary>
         /// (XPATH) 予約一覧のチェックイン日時
         /// </summary>
-        public static string XPATH_RESERVATION_DATE = "//*[@id=\"mainArea\"]/div[2]/div/section/section[1]/form/div[3]/div[1]/div/table/tbody/tr[1]/td";
+        public static string XPATH_RESERVATION_DATE = "//*[@id=\"mainArea\"]/div[2]/div/section/section/form/div[3]/div[1]/div/table/tbody/tr[1]/td";
     }
 }

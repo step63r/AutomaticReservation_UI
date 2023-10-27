@@ -88,6 +88,8 @@
                                 </DatePicker>
                                 <TextBlock Text="から1泊" Opacity="1.0" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
                                 <ComboBox materialDesign:HintAssist.Hint="部屋タイプ" ItemsSource="{Binding Path=ColRoomType}" DisplayMemberPath="RoomTypeName" SelectedItem="{Binding Path=SelectedRoomType}" Margin="0,0,20,0"/>
+                                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Path=StrictRoomType}" Margin="0,0,5,0"/>
+                                <TextBlock Text="厳密な部屋タイプ" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="部屋タイプで選択した部屋タイプに限定して予約を行います"/>
                                 <ComboBox materialDesign:HintAssist.Hint="チェックイン予定時刻" ItemsSource="{Binding Path=ColCheckinTime}" DisplayMemberPath="CheckinName" SelectedItem="{Binding Path=SelectedCheckinTime}" Margin="0,0,20,0"/>
 
                                 <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding Path=ChkNoSmoking}" Margin="0,0,10,0">

@@ -21,6 +21,9 @@ namespace AutomaticReservation_UI.ToyokoInn
         // 部屋タイプ
         [XmlElement("Type")]
         public RoomType Type { get; set; }
+        // 厳密な部屋タイプのみに限定する
+        [XmlElement("StrictRoomType")]
+        public bool StrictRoomType { get; set; }
         // 禁煙ルームを検索する
         [XmlElement("EnableNoSmoking")]
         public bool EnableNoSmoking { get; set; }

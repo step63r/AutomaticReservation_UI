@@ -142,7 +142,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                             if (!ProcFormat.SmokingFirst)
                             {
                                 // 禁煙を優先
-                                ret = SearchRoom(driver, "禁煙");
+                                ret = SearchRoom(driver, "禁煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                                 if (ret)
                                 {
                                     log.Debug("禁煙　空室あり");
@@ -151,7 +151,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 else
                                 {
                                     // print 満室
-                                    ret = SearchRoom(driver, "喫煙");
+                                    ret = SearchRoom(driver, "喫煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                                     if (ret)
                                     {
                                         log.Debug("喫煙　空室あり");
@@ -167,7 +167,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                             else
                             {
                                 // 喫煙を優先
-                                ret = SearchRoom(driver, "喫煙");
+                                ret = SearchRoom(driver, "喫煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                                 if (ret)
                                 {
                                     log.Debug("喫煙　空室あり");
@@ -176,7 +176,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 else
                                 {
                                     // print 満室
-                                    ret = SearchRoom(driver, "禁煙");
+                                    ret = SearchRoom(driver, "禁煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                                     if (ret)
                                     {
                                         log.Debug("禁煙　空室あり");
@@ -193,7 +193,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         else if (ProcFormat.EnableNoSmoking)
                         {
                             // 禁煙
-                            ret = SearchRoom(driver, "禁煙");
+                            ret = SearchRoom(driver, "禁煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                             if (ret)
                             {
                                 log.Debug("禁煙　空室あり");
@@ -208,7 +208,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                         else
                         {
                             // 喫煙
-                            ret = SearchRoom(driver, "喫煙");
+                            ret = SearchRoom(driver, "喫煙", ProcFormat.StrictRoomType, ProcFormat.Type.RoomTypeName);
                             if (ret)
                             {
                                 log.Debug("喫煙　空室あり");
@@ -463,8 +463,10 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         /// <param name="driver">WebDriverオブジェクト</param>
         /// <param name="match">禁煙、もしくは喫煙</param>
+        /// <param name="strictRoomType">厳密な部屋タイプのみに限定する</param>
+        /// <param name="roomTypeName">ホテル名</param>
         /// <returns></returns>
-        private bool SearchRoom(IWebDriver driver, string match)
+        private bool SearchRoom(IWebDriver driver, string match, bool strictRoomType, string roomTypeName)
         {
             bool ret = false;
 
@@ -480,6 +482,17 @@ namespace AutomaticReservation_UI.ToyokoInn
                     {
                         try
                         {
+                            if (strictRoomType)
+                            {
+                                string roomName = driver.FindElement(By.XPath(SiteConfig.XPATH_ROOM_NAME.Replace("INTEGER", i.ToString()))).Text.Replace($"{match} ", "");
+                                // 厳密な部屋タイプ名称と不一致であればカウンタを回して続行
+                                if (!roomName.Equals(roomTypeName))
+                                {
+                                    i++;
+                                    continue;
+                                }
+                            }
+
                             driver.FindElement(By.XPath(SiteConfig.XPATH_RESERVEBTN.Replace("INTEGER", i.ToString()))).Click();
                             // 予約ボタンが押下可能な状態だったらループを抜ける
                             ret = true;

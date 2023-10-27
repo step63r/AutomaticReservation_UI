@@ -253,6 +253,23 @@ namespace AutomaticReservation_UI.ViewModel
             }
         }
 
+        private bool _strictRoomType;
+        /// <summary>
+        /// 厳密な部屋タイプのみに限定する
+        /// </summary>
+        public bool StrictRoomType
+        {
+            get
+            {
+                return _strictRoomType;
+            }
+            set
+            {
+                _strictRoomType = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableCollection<CheckinTime> _colCheckinTime;
         /// <summary>
         /// チェックイン予定時刻コレクション
@@ -559,6 +576,7 @@ namespace AutomaticReservation_UI.ViewModel
                     HotelID = default(Hotel),
                     CheckinDate = DateTime.Now.AddDays(1),
                     Type = default(RoomType),
+                    StrictRoomType = false,
                     CheckinValue = default(CheckinTime),
                     EnableNoSmoking = true,
                     EnableSmoking = false,
@@ -571,6 +589,7 @@ namespace AutomaticReservation_UI.ViewModel
             SelectedHotel = selectedSearchSettings.HotelID is null ? null : ColLimitedHotel.Where(item => item.HotelID == selectedSearchSettings.HotelID.HotelID).First();
             CheckinDate = selectedSearchSettings.CheckinDate;
             SelectedRoomType = selectedSearchSettings.Type is null ? null : ColRoomType.Where(item => item.RoomTypeID == selectedSearchSettings.Type.RoomTypeID).First();
+            StrictRoomType = selectedSearchSettings.StrictRoomType;
             SelectedCheckinTime = selectedSearchSettings.CheckinValue is null ? null : ColCheckinTime.Where(item => item.CheckinValue == selectedSearchSettings.CheckinValue.CheckinValue).First();
             ChkNoSmoking = selectedSearchSettings.EnableNoSmoking;
             ChkSmoking = selectedSearchSettings.EnableSmoking;
@@ -598,6 +617,7 @@ namespace AutomaticReservation_UI.ViewModel
                 },
                 CheckinDate = CheckinDate,
                 Type = SelectedRoomType,
+                StrictRoomType = StrictRoomType,
                 CheckinValue = SelectedCheckinTime,
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,

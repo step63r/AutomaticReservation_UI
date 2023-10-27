@@ -111,5 +111,9 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// (XPATH) 予約一覧のチェックイン日時
         /// </summary>
         public static string XPATH_RESERVATION_DATE = "//*[@id=\"mainArea\"]/div[2]/div/section/section/form/div[3]/div[1]/div/table/tbody/tr[1]/td";
+        /// <summary>
+        /// (XPATH) ヒットした部屋（INTEGER -> 任意の数字）
+        /// </summary>
+        public static string XPATH_ROOM_NAME = "//*[@id=\"section_std\"]/h2[INTEGER]/em";
     }
 }

@@ -819,6 +819,7 @@ namespace AutomaticReservation_UI.ViewModel
                 HotelID = SelectedHotel,
                 CheckinDate = CheckinDate,
                 Type = SelectedRoomType,
+                StrictRoomType = StrictRoomType,
                 CheckinValue = SelectedCheckinTime,
                 EnableNoSmoking = ChkNoSmoking,
                 EnableSmoking = ChkSmoking,

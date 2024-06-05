@@ -48,6 +48,10 @@ namespace AutomaticReservation_UI.ToyokoInn
         /// </summary>
         public static string XPATH_ADDRESS = "//*[@id=\"mainArea\"]/section[ITER_REGION]/section[ITER_HOTEL]/div/div[3]";
         /// <summary>
+        /// (XPATH) 利用目的 - 出張・ビジネス
+        /// </summary>
+        public static string XPATH_PURPOSE_OF_USE = "//*[@id=\"purpose-business\"]";
+        /// <summary>
         /// (XPath) 連絡先電話番号
         /// </summary>
         public static string XPATH_TEL = "//*[@id=\"mainArea\"]/section[2]/div/div[3]/div/div[1]/table/tbody/tr[8]/td/span/input";

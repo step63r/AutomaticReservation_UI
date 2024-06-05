@@ -242,16 +242,19 @@ namespace AutomaticReservation_UI.ToyokoInn
                         {
                             log.Debug("予約中");
                             Message = "予約中";
+                            // 利用目的をチェック
+                            log.Debug($"処理中：{SiteConfig.XPATH_PURPOSE_OF_USE}");
+                            driver.FindElement(By.XPath(SiteConfig.XPATH_PURPOSE_OF_USE)).Click();
                             // 電話番号入力
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_TEL));
+                            log.Debug($"処理中：{SiteConfig.XPATH_TEL}");
                             driver.FindElement(By.XPath(SiteConfig.XPATH_TEL)).SendKeys(_loginInfo.LoginTel);
                             // チェックイン予定時刻
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CHKINTIME));
+                            log.Debug($"処理中：{SiteConfig.XPATH_CHKINTIME}");
                             var chktime_element = driver.FindElement(By.XPath(SiteConfig.XPATH_CHKINTIME));
                             var chktime_select_element = new SelectElement(chktime_element);
                             chktime_select_element.SelectByValue(ProcFormat.CheckinValue.CheckinValue);
                             // 確認ボタン押下
-                            log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_CONFIRM));
+                            log.Debug($"処理中：{SiteConfig.XPATH_CONFIRM}");
                             driver.FindElement(By.XPath(SiteConfig.XPATH_CONFIRM)).Click();
 
                             // 同一日で予約があった場合
@@ -261,8 +264,11 @@ namespace AutomaticReservation_UI.ToyokoInn
                                 var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 3));
 
                                 // iframeに操作をスイッチ
-                                wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(By.CssSelector(SiteConfig.IFRAME_OVERWRITE)));
-                                log.Debug(String.Format("処理中：{0}", SiteConfig.XPATH_OVERWRITE));
+                                var iframe = driver.FindElement(By.CssSelector(SiteConfig.IFRAME_OVERWRITE));
+                                driver.SwitchTo().Frame(iframe);
+
+                                //wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(By.CssSelector(SiteConfig.IFRAME_OVERWRITE)));
+                                log.Debug($"処理中：{SiteConfig.XPATH_OVERWRITE}");
                                 if (SiteConfig.STR_OVERWRITE.Equals(driver.FindElement(By.XPath(SiteConfig.XPATH_OVERWRITE)).Text))
                                 {
                                     if (ProcFormat.EnableOverwrite)
@@ -283,11 +289,15 @@ namespace AutomaticReservation_UI.ToyokoInn
                             {
                                 // 何もしない
                             }
+                            finally
+                            {
+                                driver.SwitchTo().DefaultContent();
+                            }
 
                             // 予約＆正常終了確認
                             try
                             {
-                                
+
 
                                 // 20180407　規約に同意チェック欄対応
                                 // チェックボックスにチェック
@@ -346,7 +356,7 @@ namespace AutomaticReservation_UI.ToyokoInn
                     {
                         log.Error(ex.ToString());
                         if (ProcFormat.EnableAutoRetry)
-                        {                            
+                        {
                             log.Info("処理を続行します");
                         }
                         else

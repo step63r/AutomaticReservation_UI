@@ -5,8 +5,8 @@
 東横INNに標準対応しています。
 
 ## Requirement
-* Windows 7 Professional (32-bit) / 10 Home (64-bit)
-* .NET Framework 4.5.1 以上
+* Windows 11 Pro 23H2+
+* .NET Framework 4.8
 
 ## At First
 初回起動時はメニューボタン（︙）の「予約設定」からアカウント設定を行って下さい。
